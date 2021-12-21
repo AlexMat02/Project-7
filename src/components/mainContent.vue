@@ -1,5 +1,5 @@
 <template>
-    <div class="mainContent__container" v-on:load="postCreator">
+    <div class="mainContent__container" v-on:click="postCreator">
         <div class="divContent">
             <div class="divContent__top">
                 <router-link to="/profilExample"><img class="divContent__profilImg" src="../assets/logo.png"></router-link>
@@ -74,7 +74,7 @@ export default {
                 mainDiv.appendChild(contentDiv);
                 contentDiv.appendChild(pContent);
             }  
-        },
+        }
     }
 }
 </script>
