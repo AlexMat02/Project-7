@@ -1,19 +1,9 @@
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
 
 const mongoose = require("mongoose")
 
-const app = express();
-
-app.use(cors());
-app.use(bodyParser.json());
-
-app.get('/', (req, res) => {
-    res.json({
-        message: 'Hello it is working'
-    });
-});
+const app = require('./app');
+app.set('port', process.env.PORT || 4000);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {

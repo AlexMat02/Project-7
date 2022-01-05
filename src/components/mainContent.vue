@@ -1,5 +1,5 @@
 <template>
-    <div class="mainContent__container" v-on:click="postCreator">
+    <div class="mainContent__container">
         <div class="divContent">
             <div class="divContent__top">
                 <router-link to="/profilExample"><img class="divContent__profilImg" src="../assets/logo.png"></router-link>
@@ -38,15 +38,9 @@ export default {
     name: "mainContent",
     data(){
         return {
-             posts: [
-                 {title: "read", type: "Work", content: "Lorem, ipsum", user: "me", img: "../assets/logo.png"},
-                 {title: "seen", type: "Fun", content: "Lorem, quinze", user: "me", img: "../assets/logo.png"},
-                 {title: "worked", type: "Work", content: "Lorem, twelve", user: "me", img: "../assets/logo.png"}
-            ]
         }
     }, methods: {
         postCreator() {
-            console.log("oops")
             for (let n = 0; n < this.posts.length; n++) {
                 const baseDiv = document.getElementsByClassName("mainContent__container")[0];
                 let mainDiv = document.createElement("div");
@@ -75,6 +69,14 @@ export default {
                 contentDiv.appendChild(pContent);
             }  
         }
+    },
+    mounted() {
+        fetch("http://localhost:4000/api/posts", {method: 'GET', 
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(res => console.log(" Fetching GET posts -> " , res))
     }
 }
 </script>
