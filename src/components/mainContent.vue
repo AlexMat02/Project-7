@@ -10,26 +10,6 @@
                 <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere, veritatis quae recusandae rerum amet nihil magnam ea quod magni laboriosam. Laudantium soluta illum perspiciatis libero, quibusdam perferendis. Nostrum, atque magnam?</p>
             </div>
         </div>
-        <div class="divContent">
-            <div class="divContent__top">
-                <router-link to="/profilExample"><img class="divContent__profilImg" src="../assets/logo.png"></router-link>
-                <h2 class="divContent__header">Example Title</h2>
-                <h2 class="divContent__header divContent__filter"> Fun </h2>
-            </div>
-            <div class="divContent__content">
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere, veritatis quae recusandae rerum amet nihil magnam ea quod magni laboriosam. Laudantium soluta illum perspiciatis libero, quibusdam perferendis. Nostrum, atque magnam?</p>
-            </div>
-        </div>
-        <div class="divContent">
-            <div class="divContent__top">
-                <router-link to="/profilExample"><img class="divContent__profilImg" src="../assets/logo.png"></router-link>
-                <h2 class="divContent__header">Example Title</h2>
-                <h2 class="divContent__header divContent__filter"> Fun </h2>
-            </div>
-            <div class="divContent__content">
-                <img src="../assets/logo.png">
-            </div>
-        </div>
     </div>
 </template>
 
@@ -40,43 +20,46 @@ export default {
         return {
         }
     }, methods: {
-        postCreator() {
-            for (let n = 0; n < this.posts.length; n++) {
-                const baseDiv = document.getElementsByClassName("mainContent__container")[0];
-                let mainDiv = document.createElement("div");
-                mainDiv.className = "divContent";
-                let headerDiv = document.createElement("div");
-                headerDiv.className = "divContent__top"
-                let contentDiv = document.createElement("div");
-                contentDiv.className = "divContent__content";
-                let pContent = document.createElement("p");
-                pContent.textContent = this.posts[n].content;
-                let headerLogo = document.createElement("img");
-                headerLogo.className = "divContent__profilImg";
-                headerLogo.src = this.posts[n].img;
-                let headerTitle = document.createElement("h2");
-                headerTitle.className = "divContent__header";
-                headerTitle.textContent = this.posts[n].title;
-                let headerType = document.createElement("h2");
-                headerType.className = "divContent__header divContent__filter";
-                headerType.innerText = this.posts[n].type;
-                baseDiv.appendChild(mainDiv);
-                mainDiv.appendChild(headerDiv);
-                headerDiv.appendChild(headerLogo);
-                headerDiv.appendChild(headerTitle);
-                headerDiv.appendChild(headerType);
-                mainDiv.appendChild(contentDiv);
-                contentDiv.appendChild(pContent);
-            }  
-        }
+        
     },
     mounted() {
+        let testArray = [];
+        console.log("mounted testArray -> " , testArray)
         fetch("http://localhost:4000/api/posts", {method: 'GET', 
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(res => console.log(" Fetching GET posts -> " , res))
+        .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
+        .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
+        let posts = JSON.parse(localStorage.getItem('postArray'));
+        for (let n = 0; n < posts.length; n++) {
+            const baseDiv = document.getElementsByClassName("mainContent__container")[0];
+            let mainDiv = document.createElement("div");
+            mainDiv.className = "divContent";
+            let headerDiv = document.createElement("div");
+            headerDiv.className = "divContent__top"
+            let contentDiv = document.createElement("div");
+            contentDiv.className = "divContent__content";
+            let pContent = document.createElement("p");
+            pContent.textContent = posts[n].content;
+            let headerLogo = document.createElement("img");
+            headerLogo.className = "divContent__profilImg";
+            headerLogo.src = posts[n].img;
+            let headerTitle = document.createElement("h2");
+            headerTitle.className = "divContent__header";
+            headerTitle.textContent = posts[n].title;
+            let headerType = document.createElement("h2");
+            headerType.className = "divContent__header divContent__filter";
+            headerType.innerText = posts[n].type;
+            baseDiv.appendChild(mainDiv);
+            mainDiv.appendChild(headerDiv);
+            headerDiv.appendChild(headerLogo);
+            headerDiv.appendChild(headerTitle);
+            headerDiv.appendChild(headerType);
+            mainDiv.appendChild(contentDiv);
+            contentDiv.appendChild(pContent);
+        }
     }
 }
 </script>

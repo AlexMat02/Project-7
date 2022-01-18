@@ -6,7 +6,10 @@
                 <h2> Title </h2>
                 <input class="inputBar">
                 <h2> Type </h2>
-                <input class="inputBar">
+                <select v-on:change="test()" class="inputBar dropDownMenu">
+                    <option> Work </option>
+                    <option> Fun </option>
+                </select>
                 <h2> Content </h2>
                 <textarea class="inputBar" id="textarea"></textarea>
                 <h2> Image URL </h2>
@@ -28,9 +31,11 @@ export default ({
     methods: {
         postCreator() {
             const titleInput = document.getElementsByClassName("inputBar")[0];
-            const typeInput = document.getElementsByClassName("inputBar")[1];
+            const typeInput = document.getElementsByClassName("inputBar")[1].value;
             const contentInput = document.getElementsByClassName("inputBar")[2];
             const imgInput = document.getElementsByClassName("inputBar")[3];
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            console.log("LOGGED USERDATA .USERID -> " ,userData.userId)
             if ( titleInput.value != "" && typeInput.value != "" && contentInput.value != "" && imgInput.value != "") {
                 console.log("postCreator is now working");
                 console.log( "title -> " , titleInput.value )
@@ -39,12 +44,12 @@ export default ({
                 console.log( "img -> " , imgInput.value )
                 const postContent = {
                     title: titleInput.value,
-                    type: typeInput.value,
+                    type: typeInput,
                     content: contentInput.value,
                     img: imgInput.value,
+                    userId: userData.userId,
                 }
                 console.log(postContent);
-                console.log(userId)
                 fetch("http://localhost:4000/api/posting", {method: 'POST', 
                     headers: {
                     'Accept': 'application/json',
@@ -54,6 +59,12 @@ export default ({
             } else {
                 console.log("empty inputs")
             }
+        },
+        test() {
+            const typeInput = document.getElementsByClassName("inputBar")[1].value;
+            console.log("typeINput" , typeInput)
+            console.log("aa -> " , document.getElementsByClassName("inputBar")[1])
+            console.log("aabb -> " , document.getElementsByClassName("inputBar")[1].value)
         }
     }
 })
@@ -68,5 +79,19 @@ export default ({
     width: 8rem;
     height: 3rem;
     font-size: large;
+}
+.dropDownMenu {
+    margin: 10px;
+    background-color: white;
+    border: solid 2px white;
+    appearance: none;
+    border-radius: 15%;
+    color: blueviolet;
+    font-size: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 800;
+}
+.dropDownMenu:hover{
+    cursor: pointer;
 }
 </style>

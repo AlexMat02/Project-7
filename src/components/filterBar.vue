@@ -2,7 +2,7 @@
     <div id="container">
         <div id="container__dropdownMenu">
             <h3> Sort by </h3>
-            <select v-on:change="currentType()" id="dropdownMenu">
+            <select v-on:change="currentType()" class="dropDownMenu">
                 <option> Popular </option>
                 <option> Work </option>
                 <option> Fun </option>
@@ -25,7 +25,7 @@ export default {
     },
     methods: {
         currentType() {
-            const dropDownMenu = document.getElementById("dropdownMenu");
+            const dropDownMenu = document.getElementsByClassName("dropDownMenu")[0];
             console.log(dropDownMenu.value)
         }
     }
@@ -50,7 +50,7 @@ export default {
     display: flex;
     flex-direction: row;
 }
-#dropdownMenu {
+.dropDownMenu {
     margin: 10px;
     background-color: white;
     border: solid 2px white;
@@ -61,7 +61,7 @@ export default {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 800;
 }
-#dropdownMenu:hover{
+.dropDownMenu:hover{
     cursor: pointer;
 }
 </style>

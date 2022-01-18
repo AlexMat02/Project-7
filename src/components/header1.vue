@@ -3,7 +3,7 @@
         <header>
             <div class="header__container">
                 <router-link to="/"><img src="../assets/icon-left-font-monochrome-black.png" id="header1__header"></router-link>
-                <input id="searchBar" placeholder="Search">
+                <input id="searchBar" placeholder="Search" v-on:keyup.enter="searchMethod()">
             </div>
             <div>
                 <router-link to="/login"><button class="header__button" id="login"> Login </button></router-link>
@@ -17,6 +17,16 @@
 <script>
 export default {
     name: "header1",
+    methods: {
+    searchMethod() {
+        let searchStocker = [];
+        const inputBar = document.getElementById("searchBar");
+        for (let n = 0; n < inputBar.value.length; n++) {
+            searchStocker.push(inputBar.value.slice(n, (n + 1)))
+        }
+        console.log(searchStocker);
+    }
+}
 }
 </script>
 

@@ -33,7 +33,7 @@ export default {
     .then(result => {
       console.log("console logged api/posts -> " , result)
     }),
-    this.$store.dispatch("testAction")
+    console.log("LOGGED USERID -> " , JSON.parse(localStorage.getItem('userData')))
   }
 }
 </script>
