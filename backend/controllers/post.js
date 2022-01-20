@@ -23,12 +23,6 @@ exports.createPost = (req, res) => {
 }
 
 exports.getAllPost = (req, res) => {
-    const posts = [
-        {title: "read", type: "Work", content: "Lorem, ipsum", user: "me", img: "../assets/logo.png"},
-        {title: "seen", type: "Fun", content: "Lorem, quinze", user: "me", img: "../assets/logo.png"},
-        {title: "worked", type: "Work", content: "Lorem, twelve", user: "me", img: "../assets/logo.png"}
-    ]
-    console.log(posts);
     Post.find().then(
         (posts) => {
             res.status(200).json(posts);

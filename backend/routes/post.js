@@ -12,13 +12,13 @@ router.use((req, res, next) => {
     next();
 });
 
-router.post('/api/posting', postCtrl.createPost);
+router.post('/api/posting', auth, postCtrl.createPost);
  
 router.get('/api/posts', postCtrl.getAllPost);
 
-router.put('/api/posts/:id', postCtrl.updatePost);
+router.put('/api/posts/:id', auth, postCtrl.updatePost);
 
-router.delete('/api/posts/:id', postCtrl.deletePost);
+router.delete('/api/posts/:id', auth, postCtrl.deletePost);
 
 router.get('/api/posts/:id', postCtrl.getOnePost);
 

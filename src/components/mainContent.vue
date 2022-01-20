@@ -20,11 +20,8 @@ export default {
         return {
         }
     }, methods: {
-        
     },
     mounted() {
-        let testArray = [];
-        console.log("mounted testArray -> " , testArray)
         fetch("http://localhost:4000/api/posts", {method: 'GET', 
             headers: {
             'Accept': 'application/json',
@@ -52,19 +49,33 @@ export default {
             let headerType = document.createElement("h2");
             headerType.className = "divContent__header divContent__filter";
             headerType.innerText = posts[n].type;
+            let link = document.createElement("a");
+            link.href = "/postExample"
+            link.id = n;
             baseDiv.appendChild(mainDiv);
             mainDiv.appendChild(headerDiv);
             headerDiv.appendChild(headerLogo);
-            headerDiv.appendChild(headerTitle);
+            headerDiv.append(link);
+            link.appendChild(headerTitle);
             headerDiv.appendChild(headerType);
             mainDiv.appendChild(contentDiv);
             contentDiv.appendChild(pContent);
+
+            let currentPost = document.getElementById(n);
+            currentPost.addEventListener("click", () => {
+                let postChosen = JSON.stringify(n);
+                localStorage.setItem("postNumber" , postChosen);
+                console.log("LOGGED postNumber -> " , JSON.parse(localStorage.getItem("postNumber")));
+            })
         }
     }
 }
 </script>
 
 <style>
+a, a:hover, a:visited, a:active{
+    text-decoration: none;
+}
 .mainContent__container {
     margin-right: auto;
     margin-left: auto;

@@ -32,7 +32,6 @@ export default({
         login() {
             const emailInput = document.getElementsByClassName("inputBar")[0];
             const passwordInput = document.getElementsByClassName("inputBar")[1];
-            console.log("logged username and password -> " , emailInput.value, passwordInput.value);
             const userInfos = {
                 email: emailInput.value,
                 password: passwordInput.value,
@@ -45,6 +44,9 @@ export default({
             .then(response => response.json())
             .then(res => localStorage.setItem("userData" , JSON.stringify(res))) // not returning anything
             .then(console.log( "logged localstorage -> " , JSON.parse(localStorage.getItem('userData'))))
+            .catch( () => {
+                console.log("error")
+            })
         }
     },
 })

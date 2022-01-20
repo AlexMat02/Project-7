@@ -46,7 +46,7 @@ exports.login = (req, res, next) => {
                     const token = jwt.sign({userId: user._id}, 'SUPER_SECRET_TOKEN', {expiresIn: '24h'});
                     res.status(200).json({
                         userId: user._id,
-                        token: token
+                        token: token,
                     });
                 }
             ).catch(
@@ -60,6 +60,22 @@ exports.login = (req, res, next) => {
     ).catch(
         (err) => {
             res.status(500).json({
+                error: err
+            })
+        }
+    )
+};
+
+exports.deleteUser = (req, res, next) => {
+    User.deleteOne({_id: req.params.id}).then(
+        () => {
+            res.status(200).json({
+                message: "user deleted"
+            })
+        }
+    ).catch(
+        (err) => {
+            res.status(400).json({
                 error: err
             })
         }

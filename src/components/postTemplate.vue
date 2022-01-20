@@ -3,22 +3,19 @@
         <div class="divContent">
             <div class="divContent__top">
                 <router-link to="/profilExample"><img class="divContent__profilImg" src="../assets/logo.png"></router-link>
-                <h2 class="divContent__header">Example Title</h2>
-                <h2 class="divContent__header divContent__filter"> Fun </h2>
+                <h2 class="divContent__header" id="postTitle">Example Title</h2>
+                <h2 class="divContent__header divContent__filter" id="postType"> Fun </h2>
             </div>
-            <div class="divContent__content">
-                <img src="../assets/logo.png">
-            </div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor iusto, harum expedita dolorum quo repellat vel labore magni, magnam ipsa, ducimus inventore est. Perferendis assumenda nam ex recusandae natus maiores.
+            <p id="postText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor iusto, harum expedita dolorum quo repellat vel labore magni, magnam ipsa, ducimus inventore est. Perferendis assumenda nam ex recusandae natus maiores.
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur debitis qui, totam earum, dolore impedit atque exercitationem quidem eveniet facilis ipsam, doloribus sequi accusamus cum consequuntur tenetur nesciunt at. Consequatur.
             </p>
             <div class="divContent__top">
                 <input class="input-classic" placeholder="Share your thoughts..." v-on:keyup.enter="commentCreator">
                 <div class="divContent__btnstack">
-                    <h3> {{ like }} </h3>
-                    <button class="btn__like btn__like-green" v-on:click="postLiked"><h3> Like </h3></button>
-                    <h3> {{ dislike }} </h3>
-                    <button class="btn__like btn__like-red" v-on:click="postDisliked"><h3> Dislike </h3></button>
+                    <h3> 0 </h3>
+                    <button class="btn__like btn__like-green"><h3> Like </h3></button>
+                    <h3> 0 </h3>
+                    <button class="btn__like btn__like-red"><h3> Dislike </h3></button>
                 </div>
             </div>
         </div>
@@ -31,8 +28,6 @@ export default {
     data() {
         return {
             commentText: "",
-            like: 0,
-            dislike: 0,
         }
     },
     methods: {
@@ -49,12 +44,26 @@ export default {
                 inputValue.value = "";
             }
         },
-        postLiked() {
-            this.like++
-        },
-        postDisliked() {
-            this.dislike++
-        },
+    },
+    mounted() {
+        fetch("http://localhost:4000/api/posts", {method: 'GET', 
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
+        .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
+        let posts = JSON.parse(localStorage.getItem('postArray'));
+        console.log("LOGGED postNumber -> " , JSON.parse(localStorage.getItem("postNumber")));
+        const postNumber = JSON.parse(localStorage.getItem("postNumber"));
+        console.log("LOGGED const postNumber -> " , postNumber);
+        const title = document.getElementById("postTitle");
+        const type = document.getElementById("postType");
+        const text = document.getElementById("postText");
+        console.log("LOGGED posts[0]");
+        title.innerHTML = posts[postNumber].title;
+        type.innerHTML = posts[postNumber].type;
+        text.innerHTML = posts[postNumber].content;  
     }
 }
 </script>
