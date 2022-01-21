@@ -9,9 +9,6 @@
                 <option> New </option>
             </select>
         </div>
-        <div>
-            <h3> | Post created today : 0</h3>
-        </div>
     </div>
 </template>
 

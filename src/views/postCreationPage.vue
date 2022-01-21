@@ -32,6 +32,7 @@ export default ({
         postCreator() {
             const titleInput = document.getElementsByClassName("inputBar")[0];
             const typeInput = document.getElementsByClassName("inputBar")[1].value;
+            console.log("typeINput.value -> " , typeInput);
             const contentInput = document.getElementsByClassName("inputBar")[2];
             const imgInput = document.getElementsByClassName("inputBar")[3];
             const userData = JSON.parse(localStorage.getItem('userData'));
@@ -39,7 +40,7 @@ export default ({
             if ( titleInput.value != "" && typeInput.value != "" && contentInput.value != "" && imgInput.value != "") {
                 console.log("postCreator is now working");
                 console.log( "title -> " , titleInput.value )
-                console.log( "type -> " , typeInput.value )
+                console.log( "type -> " , typeInput)
                 console.log( "content -> " , contentInput.value )
                 console.log( "img -> " , imgInput.value )
                 const postContent = {
@@ -54,6 +55,7 @@ export default ({
                     headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'},
+                    authorization: userData.token,
                     body: JSON.stringify(postContent)})
                 .then(console.log("fetch request send"))
             } else {
