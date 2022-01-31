@@ -9,21 +9,8 @@
                 <p class="editableP"> {{ editingText }} </p>
             </div>
             <button class="btn-classic btn__reverse" @click="editing"><h3> Edit </h3></button>
-        </div>
-        <div>
-            <h2> Recent Posts </h2>
-            <div class="divContent">
-                <div class="divContent__top">
-                    <router-link to="/profilExample"><img class="divContent__profilImg" src="../assets/logo.png"></router-link>
-                    <h2 class="divContent__header">Example Title</h2>
-                    <h2 class="divContent__header divContent__filter"> Fun </h2>
-                </div>
-                <div class="divContent__content">
-                    <img src="../assets/logo.png">
-                </div>
-            </div>
-        </div>
-        
+            <button class="btn-classic btn__reverse"><h3> Delete Profil </h3></button>
+        </div>   
     </div>
 </template>
 
@@ -65,6 +52,17 @@ export default {
             }
             
         },
+    },
+    mounted(){
+        const profilId = localStorage.getItem("profilId");
+        console.log("LOGGED profilId -> " , profilId);
+        fetch("http://localhost:4000/auth/users", {method: 'GET', 
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(res => localStorage.setItem("userArray", JSON.stringify(res)))
+        .then(console.log("LOGGED array of all users -> " , JSON.parse(localStorage.getItem("userArray"))));
     }
 }
 </script>

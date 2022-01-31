@@ -13,9 +13,10 @@
                 <input class="input-classic" placeholder="Share your thoughts..." v-on:keyup.enter="commentCreator">
                 <div class="divContent__btnstack">
                     <h3> 0 </h3>
-                    <button class="btn__like btn__like-green"><h3> Like </h3></button>
+                    <button class="btn__like btn__like-green" @click="LikeRequest()"><h3> Like </h3></button>
                     <h3> 0 </h3>
-                    <button class="btn__like btn__like-red"><h3> Dislike </h3></button>
+                    <button class="btn__like btn__like-red" @click="DislikeRequest()"><h3> Dislike </h3></button>
+                    <button class="btn__like btn__like-delete" v-if="loggedIn == true" @click="deleteRequest()"><h3> Delete</h3></button>
                 </div>
             </div>
         </div>
@@ -28,6 +29,7 @@ export default {
     data() {
         return {
             commentText: "",
+            loggedIn: false,
         }
     },
     methods: {
@@ -44,6 +46,23 @@ export default {
                 inputValue.value = "";
             }
         },
+        deleteRequest() {
+            console.log("delete Post has been requested");
+            const posts = JSON.parse(localStorage.getItem("postArray"));
+            const postNumber = JSON.parse(localStorage.getItem("postNumber"));
+            console.log("LOGGED -> " , posts[postNumber]);
+            fetch(`http://localhost:4000/api/posts/${posts[postNumber]._id}`, {method: 'DELETE',
+            headers: {
+                'Accept' : 'application/json',
+                'Content-Type': 'application/json' 
+            }})
+        },
+        LikeRequest() {
+            console.log("like Request has been sent");
+        },
+        DislikeRequest(){
+            console.log("dislike Request has been sent");
+        }
     },
     mounted() {
         fetch("http://localhost:4000/api/posts", {method: 'GET', 
@@ -63,7 +82,24 @@ export default {
         console.log("LOGGED posts[0]");
         title.innerHTML = posts[postNumber].title;
         type.innerHTML = posts[postNumber].type;
-        text.innerHTML = posts[postNumber].content;  
+        text.innerHTML = posts[postNumber].content;
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        this.$store.dispatch('expChecker' , {userData})
+        const expCheck = localStorage.getItem('expChecking');
+        console.log("expChecking -> " , expCheck)
+        console.log("LOGGED userData -> " , userData);
+        if (userData != null && posts[postNumber].userId == userData.userData.userId) {
+            console.log("user has created this")
+            if (expCheck == "true") {
+                this.loggedIn = true;
+                console.log("loggedIn set to true");
+            } else {
+                this.loggedIn = false;
+                console.log("loggedIn set to false");
+            }
+        } else {
+            console.log("not the right user or not connected")
+        }
     }
 }
 </script>
@@ -98,6 +134,13 @@ export default {
 }
 .btn__like-green:hover{
     background-color: lightgreen;
+    cursor: pointer;
+}
+.btn__like-delete{
+    background-color: purple;
+}
+.btn__like-delete:hover{
+    background-color: rgb(173, 0, 173);
     cursor: pointer;
 }
 .pComment{

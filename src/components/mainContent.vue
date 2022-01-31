@@ -42,7 +42,6 @@ export default {
             pContent.textContent = posts[n].content;
             let headerLogo = document.createElement("img");
             headerLogo.className = "divContent__profilImg";
-            headerLogo.src = posts[n].img;
             let headerTitle = document.createElement("h2");
             headerTitle.className = "divContent__header";
             headerTitle.textContent = posts[n].title;
@@ -68,6 +67,8 @@ export default {
                 console.log("LOGGED postNumber -> " , JSON.parse(localStorage.getItem("postNumber")));
             })
         }
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        this.$store.dispatch('expChecker' , {userData});
     }
 }
 </script>

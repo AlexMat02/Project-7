@@ -11,7 +11,7 @@
                     </div>
                     <div>
                         <h2> Password </h2>
-                        <input class="inputBar">
+                        <input type="password" class="inputBar">
                     </div>
                 </div>
                 <button class="btn-classic" @click="login()"> <h3>LOGIN</h3> </button>
@@ -36,13 +36,17 @@ export default({
                 email: emailInput.value,
                 password: passwordInput.value,
             }
+            const currentDate = new Date();
+            const expDate = currentDate.getTime() + 60000;
+            const dataHandler = {'Exp' : expDate}
             fetch("http://localhost:4000/auth/login", {method: 'POST', 
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'},
             body: JSON.stringify(userInfos)})
             .then(response => response.json())
-            .then(res => localStorage.setItem("userData" , JSON.stringify(res))) // not returning anything
+            .then(res => dataHandler.userData = res)
+            .then(res => localStorage.setItem("userData" , JSON.stringify(dataHandler))) // not returning anything
             .then(console.log( "logged localstorage -> " , JSON.parse(localStorage.getItem('userData'))))
             .catch( () => {
                 console.log("error")
