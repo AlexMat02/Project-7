@@ -51,6 +51,7 @@ exports.getOnePost = (req, res) => {
 };
 
 exports.deletePost = (req, res) => {
+    console.log("LOGGED req.params -> " , req.params)
     Post.deleteOne({_id: req.params.id}).then(
         () => {
             res.status(200).json({
