@@ -8,7 +8,7 @@
             <div>
                 <router-link to="/login"><button class="header__button" id="login"> Login </button></router-link>
                 <router-link to="/signup"><button class="header__button" id="signup"> Sign Up </button></router-link>
-                <button class="header__button" id="profil"> Profil </button>
+                <router-link to="/profilExample"><button class="header__button" id="profil" @click="setProfil()" v-if="loggedIn == true"> Profil </button></router-link>
             </div>
         </header>
     </div>
@@ -17,6 +17,11 @@
 <script>
 export default {
     name: "header1",
+    data() {
+        return {
+            loggedIn: false,
+        }
+    },
     methods: {
     searchMethod() {
         let searchStocker = [];
@@ -25,6 +30,23 @@ export default {
             searchStocker.push(inputBar.value.slice(n, (n + 1)))
         }
         console.log(searchStocker);
+    },
+    setProfil() {
+        console.log("setProfil has been called");
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        localStorage.setItem("profilId", userData.userData.userId);
+    },
+}, mounted() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    this.$store.dispatch('expChecker' , {userData});
+    const expCheck = localStorage.getItem('expChecking');
+    console.log("expChecking from header -> " , expCheck);
+    if (expCheck == "true") {
+        this.loggedIn = true;
+        console.log("loggedIn has been set to true");
+    } else {
+        this.loggedIn = false;
+        console.log("loggedIn has been set to false");
     }
 }
 }
