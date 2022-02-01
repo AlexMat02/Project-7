@@ -1,15 +1,5 @@
 <template>
     <div class="mainContent__container">
-        <div class="divContent">
-            <div class="divContent__top">
-                <router-link to="/profilExample"><img class="divContent__profilImg" src="../assets/logo.png"></router-link>
-                <router-link to="/postExample"><h2 class="divContent__header">Example Title</h2></router-link>
-                <h2 class="divContent__header divContent__filter"> Work </h2>
-            </div>
-            <div class="divContent__content">
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere, veritatis quae recusandae rerum amet nihil magnam ea quod magni laboriosam. Laudantium soluta illum perspiciatis libero, quibusdam perferendis. Nostrum, atque magnam?</p>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -22,6 +12,15 @@ export default {
     }, methods: {
     },
     mounted() {
+        // fetch allUser
+        fetch("http://localhost:4000/auth/users", {method: 'GET', 
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'}})
+        .then(response => response.json())
+        .then(res => localStorage.setItem("allUserArray", JSON.stringify(res)))
+        .then(console.log("AllUsers Array -> " , JSON.parse(localStorage.getItem("allUserArray"))))
+        // fetch Allposts
         fetch("http://localhost:4000/api/posts", {method: 'GET', 
             headers: {
             'Accept': 'application/json',
@@ -40,6 +39,9 @@ export default {
             contentDiv.className = "divContent__content";
             let pContent = document.createElement("p");
             pContent.textContent = posts[n].content;
+            let headerLogoLink = document.createElement("a");
+            headerLogoLink.href = "/profilExample"
+            headerLogoLink.id = "logo" + n; 
             let headerLogo = document.createElement("img");
             headerLogo.className = "divContent__profilImg";
             let headerTitle = document.createElement("h2");
@@ -53,7 +55,8 @@ export default {
             link.id = n;
             baseDiv.appendChild(mainDiv);
             mainDiv.appendChild(headerDiv);
-            headerDiv.appendChild(headerLogo);
+            headerDiv.appendChild(headerLogoLink);
+            headerLogoLink.appendChild(headerLogo);
             headerDiv.append(link);
             link.appendChild(headerTitle);
             headerDiv.appendChild(headerType);
@@ -65,6 +68,11 @@ export default {
                 let postChosen = JSON.stringify(n);
                 localStorage.setItem("postNumber" , postChosen);
                 console.log("LOGGED postNumber -> " , JSON.parse(localStorage.getItem("postNumber")));
+            })
+            let currentProfil = document.getElementById("logo" + n);
+            currentProfil.addEventListener("click", () => {
+                let profilChosen = posts[n].userId;
+                localStorage.setItem("profilNumber", profilChosen);
             })
         }
         const userData = JSON.parse(localStorage.getItem("userData"));

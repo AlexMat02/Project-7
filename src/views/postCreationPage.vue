@@ -65,6 +65,7 @@ export default ({
                         headers: myHeaders,
                         body: JSON.stringify(postContent, userData.userData.userId)})
                     .then(console.log("fetch request send"))
+                    this.$router.push({name: 'Home'})
                 } else {
                     console.log("empty inputs")
                 }

@@ -48,14 +48,17 @@ export default {
         },
         deleteRequest() {
             console.log("delete Post has been requested");
+            const userData = JSON.parse(localStorage.getItem('userData'));
             const posts = JSON.parse(localStorage.getItem("postArray"));
             const postNumber = JSON.parse(localStorage.getItem("postNumber"));
             console.log("LOGGED -> " , posts[postNumber]);
             fetch(`http://localhost:4000/api/posts/${posts[postNumber]._id}`, {method: 'DELETE',
             headers: {
                 'Accept' : 'application/json',
-                'Content-Type': 'application/json' 
+                'Content-Type': 'application/json',
+                'authorization': userData.userData.token
             }})
+            this.$router.push({name: 'Home'})
         },
         LikeRequest() {
             console.log("like Request has been sent");

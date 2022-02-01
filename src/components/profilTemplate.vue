@@ -3,13 +3,13 @@
         <div class="profilContainer">
             <div class="profilContainer__header">
                 <img class="profilContainer__img" src="../assets/logo.png">
-                <h2>Profil Name</h2>
+                <h2 id="profilUsername">Profil Name</h2>
             </div>
             <div class="profilContainer__description">
                 <p class="editableP"> {{ editingText }} </p>
             </div>
-            <button class="btn-classic btn__reverse" @click="editing"><h3> Edit </h3></button>
-            <button class="btn-classic btn__reverse"><h3> Delete Profil </h3></button>
+            <button v-if="this.loggedIn == true" class="btn-classic btn__reverse" @click="editing"><h3> Edit </h3></button>
+            <button v-if="this.loggedIn == true" class="btn-classic btn__reverse"><h3> Delete Profil </h3></button>
         </div>   
     </div>
 </template>
@@ -20,6 +20,7 @@ export default {
     data(){
         return{
             edit : "",
+            loggedIn: false,
             isEditing: false,
             editingText: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti assumenda reprehenderit debitis. Ipsam necessitatibus blanditiis quas soluta libero illo, asperiores nam, distinctio, quia animi ullam similique beatae doloribus vitae hic.",
         }
@@ -63,6 +64,44 @@ export default {
         .then(response => response.json())
         .then(res => localStorage.setItem("userArray", JSON.stringify(res)))
         .then(console.log("LOGGED array of all users -> " , JSON.parse(localStorage.getItem("userArray"))));
+        const userArray = JSON.parse(localStorage.getItem("userArray"));
+        const correctProfil = localStorage.getItem("profilNumber");
+        console.log("LOGGED correctProfil -> " , correctProfil);
+        let profilIndex = 0;
+        for (let n = 0; n < userArray.length; n++) {
+            if (userArray[n]._id == correctProfil) {
+                profilIndex = n;
+                console.log("LOGGED profilIndex -> " , profilIndex);
+            } else {
+                console.log("not this one")
+                console.log("LOGGED WHILE profilIndex -> " , profilIndex);
+            }
+        }
+        console.log("LOGGED userArray[profilIndex] -> " , userArray[profilIndex])
+        const profilName = document.getElementById("profilUsername");
+        profilName.innerHTML = userArray[profilIndex].username;
+        if (userArray[profilIndex].description == "" || userArray[profilIndex].description == undefined) {
+            this.editingText = "This is where you talk about yourself"
+        } else {
+            this.editingText = userArray[profilIndex].description;
+        }
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        this.$store.dispatch('expChecker' , {userData})
+        const expCheck = localStorage.getItem('expChecking');
+        console.log("expChecking -> " , expCheck)
+        console.log("LOGGED userData -> " , userData);
+        if (userData != null) {
+            console.log("user has created this")
+            if (expCheck == "true") {
+                this.loggedIn = true;
+                console.log("loggedIn set to true");
+            } else {
+                this.loggedIn = false;
+                console.log("loggedIn set to false");
+            }
+        } else {
+            console.log("not the right user or not connected")
+        }
     }
 }
 </script>
