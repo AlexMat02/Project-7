@@ -1,7 +1,7 @@
 <template>
     <div>
         <header-1/>
-        <post-template/>
+        <post-template :key="$store.state.toRender"/>
     </div>
 </template>
 

@@ -2,11 +2,17 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    toRender: 0,
   },
   getters: {
 
   },
   mutations: {
+    forceReRender(){
+      console.log("logged toRender BEFORE -> " , this.state.toRender);
+      this.state.toRender += 1;
+      console.log("logged toRender AFTER -> " , this.state.toRender);
+    }
   },
   actions: {
     createAccount: ({commit}, userInfos) => {

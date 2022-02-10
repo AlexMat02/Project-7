@@ -14,7 +14,7 @@ router.use((req, res, next) => {
 
 router.post('/api/posting', auth, postCtrl.createPost);
 
-router.post('/api/likedPost', auth, postCtrl.likedPost);
+router.post('/api/likedPost/:id', auth, postCtrl.likedPost);
  
 router.get('/api/posts', postCtrl.getAllPost);
 

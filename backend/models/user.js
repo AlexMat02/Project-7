@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
     username: {type: String, required: true},
     img: {type: String},
     description: {type: String},
+    postsSighted: {type: Array},
 });
 
 userSchema.plugin(uniqueValidator);

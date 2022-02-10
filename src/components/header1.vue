@@ -37,14 +37,17 @@ export default {
         localStorage.setItem("profilId", userData.userData.userId);
     },
 }, mounted() {
+    // check if user is logged in
     const userData = JSON.parse(localStorage.getItem('userData'));
     this.$store.dispatch('expChecker' , {userData});
     const expCheck = localStorage.getItem('expChecking');
     console.log("expChecking from header -> " , expCheck);
     if (expCheck == "true") {
+        // user is logged in
         this.loggedIn = true;
         console.log("loggedIn has been set to true");
     } else {
+        // user is not logged in
         this.loggedIn = false;
         console.log("loggedIn has been set to false");
     }

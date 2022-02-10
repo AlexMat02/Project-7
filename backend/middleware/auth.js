@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-    console.log(".body.userId -> " , req.body.userId)
-    console.log(".headers -> " , req.headers)
     try {
         const token = req.headers.authorization;
         console.log("LOGGED token -> " , token);
@@ -17,5 +15,6 @@ module.exports = (req, res, next) => {
         res.status(401).json({
             error: new Error('Invalid request')
         })
+        return
     }
 }

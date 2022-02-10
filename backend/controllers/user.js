@@ -95,3 +95,35 @@ exports.getAllUser = (req, res) => {
         }
     )
 }
+
+exports.postSighted = (req, res) => {
+    User.findOne({_id: req.params.id}).then(
+        (user) => {
+            console.log("LOGGED user BEFORE update -> " , user);
+            user.postsSighted.push(req.body.post._id);
+            // need to update post here otherwise it seems to be working
+            const uuser = {
+                email: user.email,
+                password: user.password,
+                username: user.username,
+                img: user.img,
+                description: user.description,
+                postsSighted: user.postsSighted,
+            }
+            User.updateOne({_id: req.params.id}, uuser).then(
+                () => {
+                    console.log("LOGGED UUSER -> " , uuser);
+                    res.status(200).json({
+                        message: 'Post sighted'
+                    })
+                }
+            )
+        }
+    ).catch(
+        (err) => {
+            res.status(400).json({
+                error: err
+            })
+        }
+    )
+}

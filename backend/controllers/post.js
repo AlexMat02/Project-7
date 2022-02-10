@@ -8,6 +8,10 @@ exports.createPost = (req, res) => {
         content: req.body.content,
         img: req.body.img,
         userId: req.body.userId,
+        likes: 0,
+        dislikes: 0,
+        usersLiked: [],
+        usersDisliked: [],
     });
     post.save().then(
         () => {
@@ -92,21 +96,34 @@ exports.updatePost = (req, res) => {
 }
 
 exports.likedPost = (req, res) => {
+    console.log("LOGGED post.body -> " , req.body);
+    console.log("LOGGED post.like -> " , req.body.like);
+    console.log("LOGGED req.params -> " , req.params);
+    console.log("we went there-1");
     Post.findOne({ _id: req.params.id}).then(
         (post) => {
+            console.log("we went there-1");
+            console.log("REQ.BODY -> " , req.body);
+            console.log("LOGGED post.body._id -> " , req.body._id); // Undefined
+            console.log("post._id found -> " , post._id);
             if (req.body.like === 1) {
+                console.log("we went there-1");
                 post.usersLiked.push(req.body.userId)
                 const ppost = new Post({
                     _id: post._id,
                     userId: post.userId,
                     title: post.title,
                     content: post.content,
+                    img: post.img,
                     type: post.type,
                     likes: post.likes += 1,
                     dislikes: post.dislikes,
                     usersLiked: post.usersLiked,
                     usersDisliked: post.usersDisliked 
                 })
+                console.log("ppost._id -> " , ppost._id);
+                console.log("ppost -> " , ppost);
+                console.log("we went there-2");
                 Post.updateOne({_id: req.params.id}, ppost).then(
                     () => {
                         console.log("Logged post READ-1-1 : " , ppost);
@@ -117,6 +134,8 @@ exports.likedPost = (req, res) => {
                 )
             } else if (req.body.like === 0) {
                 for (n = 0; n < post.likes; n++) {
+                    console.log("into like === 0")
+                    console.log("logged req.body.userId -> " , req.body.userId)
                     if ( post.usersLiked[n] == req.body.userId ) {
                         post.usersLiked.splice(n, 1)
                         const ppost = new Post({
@@ -124,6 +143,7 @@ exports.likedPost = (req, res) => {
                             userId: post.userId,
                             title: post.title,
                             content: post.content,
+                            img: post.img,
                             type: post.type,
                             likes: post.likes -= 1,
                             dislikes: post.dislikes,
@@ -131,6 +151,7 @@ exports.likedPost = (req, res) => {
                             usersDisliked: post.usersDisliked 
                         })
                         console.log("Logged post after remove : " , ppost);
+                        console.log("we went there 4")
                         Post.updateOne({_id: req.params.id}, ppost).then(
                             () => {
                                 res.status(200).json({
@@ -148,6 +169,7 @@ exports.likedPost = (req, res) => {
                             userId: post.userId,
                             title: post.title,
                             content: post.content,
+                            img: post.img,
                             type: post.type,
                             likes: post.likes,
                             dislikes: post.dislikes -= 1,
@@ -171,6 +193,7 @@ exports.likedPost = (req, res) => {
                     userId: post.userId,
                     title: post.title,
                     content: post.content,
+                    img: post.img,
                     type: post.type,
                     likes: post.likes,
                     dislikes: post.dislikes += 1,
@@ -195,3 +218,30 @@ exports.likedPost = (req, res) => {
         }
     )
 };
+
+/* Sauce.findOne({ _id: req.params.id}).then(
+    (sauce) => {
+        if (req.body.like === 1) {
+            sauce.usersLiked.push(req.body.userId)
+            const ssauce = new Sauce({
+                _id: sauce._id,
+                userId: sauce.userId,
+                name: sauce.name,
+                manufacturer: sauce.manufacturer,
+                description: sauce.description,
+                mainPepper: sauce.mainPepper,
+                imageUrl: sauce.imageUrl,
+                heat: sauce.heat,
+                likes: sauce.likes += 1,
+                dislikes: sauce.dislikes,
+                usersLiked: sauce.usersLiked,
+                usersDisliked: sauce.usersDisliked 
+            })
+            Sauce.updateOne({_id: req.params.id}, ssauce).then(
+                () => {
+                    console.log("Logged sauce READ-1-1 : " , ssauce);
+                    res.status(200).json({
+                        message: "Sauce Liked"
+                    });
+                }
+            ) */

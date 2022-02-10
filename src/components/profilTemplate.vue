@@ -9,7 +9,7 @@
                 <p class="editableP"> {{ editingText }} </p>
             </div>
             <button v-if="this.loggedIn == true" class="btn-classic btn__reverse" @click="editing"><h3> Edit </h3></button>
-            <button v-if="this.loggedIn == true" class="btn-classic btn__reverse"><h3> Delete Profil </h3></button>
+            <button v-if="this.loggedIn == true" class="btn-classic btn__reverse" @click="deleteRequest()"><h3> Delete Profil </h3></button>
         </div>   
     </div>
 </template>
@@ -26,6 +26,17 @@ export default {
         }
     },
     methods: {
+        deleteRequest() {
+            console.log("delete Account has been requested");
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            fetch(`http://localhost:4000/auth/deleteOneUser/${userData.userData.userId}`, {method: 'DELETE',
+            headers: {
+                'Accept' : 'application/json',
+                'Content-Type': 'application/json',
+                'authorization': userData.userData.token
+            }})
+            this.$router.push({name: 'Home'})
+        },
         editingSwitch(){
             const inputEdit = document.getElementsByTagName("input")[1];
             const container = document.getElementsByClassName("profilContainer__description")[0];
@@ -55,8 +66,10 @@ export default {
         },
     },
     mounted(){
+        // When the user clicks on his profil this is used 
         const profilId = localStorage.getItem("profilId");
         console.log("LOGGED profilId -> " , profilId);
+        // fetch allUser Array
         fetch("http://localhost:4000/auth/users", {method: 'GET', 
             headers: {
             'Accept': 'application/json',
@@ -64,9 +77,11 @@ export default {
         .then(response => response.json())
         .then(res => localStorage.setItem("userArray", JSON.stringify(res)))
         .then(console.log("LOGGED array of all users -> " , JSON.parse(localStorage.getItem("userArray"))));
+        // Get correct Data for later use
         const userArray = JSON.parse(localStorage.getItem("userArray"));
         const correctProfil = localStorage.getItem("profilNumber");
         console.log("LOGGED correctProfil -> " , correctProfil);
+        // Find the correct index of the user inside userArray
         let profilIndex = 0;
         for (let n = 0; n < userArray.length; n++) {
             if (userArray[n]._id == correctProfil) {
@@ -78,13 +93,16 @@ export default {
             }
         }
         console.log("LOGGED userArray[profilIndex] -> " , userArray[profilIndex])
+        // display the correct profil name
         const profilName = document.getElementById("profilUsername");
         profilName.innerHTML = userArray[profilIndex].username;
+        // If the user's description is empty, remplace it with "This is where you talk about yourself"
         if (userArray[profilIndex].description == "" || userArray[profilIndex].description == undefined) {
             this.editingText = "This is where you talk about yourself"
         } else {
             this.editingText = userArray[profilIndex].description;
         }
+        // Check if the user is loggedIn
         const userData = JSON.parse(localStorage.getItem('userData'));
         this.$store.dispatch('expChecker' , {userData})
         const expCheck = localStorage.getItem('expChecking');
@@ -93,9 +111,11 @@ export default {
         if (userData != null) {
             console.log("user has created this")
             if (expCheck == "true") {
+                // user is logged in
                 this.loggedIn = true;
                 console.log("loggedIn set to true");
             } else {
+                // user is not logged in
                 this.loggedIn = false;
                 console.log("loggedIn set to false");
             }
