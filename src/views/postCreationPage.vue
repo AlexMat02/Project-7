@@ -66,8 +66,16 @@ export default ({
                         body: JSON.stringify(postContent, userData.userData.userId)})
                     .then(console.log("fetch request send"))
                     this.$router.push({name: 'Home'})
+                } else if (titleInput.value == ""){
+                    titleInput.style.borderColor = "red";
+                    console.log("titleInput empty");
+                } else if (contentInput.value == "") {
+                    contentInput.style.borderColor = "red";
+                    console.log("typeInput empty");
                 } else {
-                    console.log("empty inputs")
+                    console.log("boucle not found");
+                    console.log("LOGGED titleInput -> " , titleInput.value);
+                    console.log("LOGGED contentInput -> ", contentInput.value)
                 }
             } else {
                 console.log("TEST-1 returned false")

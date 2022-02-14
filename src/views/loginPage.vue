@@ -51,6 +51,7 @@ export default({
             .catch( () => {
                 console.log("error")
             })
+            this.$router.push({name: 'Home'})
         }
     },
 })

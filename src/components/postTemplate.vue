@@ -28,7 +28,6 @@ export default {
     name: "postTemplate",
     data() {
         return {
-            commentText: "",
             loggedIn: false,
             liked: false,
             disliked: false,
@@ -37,19 +36,6 @@ export default {
         }
     },
     methods: {
-        commentCreator() {
-            const mainDiv = document.getElementsByClassName("divContent")[0];
-            const pCreator = document.createElement("p");
-            const inputValue = document.getElementsByClassName("input-classic")[0];
-            pCreator.innerText = inputValue.value;
-            pCreator.classList.add("pComment");
-            if (inputValue.value == "") {
-                console.log("empty input");
-            } else {
-                mainDiv.appendChild(pCreator);
-                inputValue.value = "";
-            }
-        },
         deleteRequest() {
             console.log("delete Post has been requested");
             const userData = JSON.parse(localStorage.getItem('userData'));
@@ -93,6 +79,15 @@ export default {
                     },
                         body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
                     })
+                    // test .then to see if the updates work #WORK
+                    .then(fetch("http://localhost:4000/api/posts", {method: 'GET', 
+                            headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'}})
+                        .then(response => response.json())
+                        .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
+                        .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
+                    )
                 } else {
                     console.log("fetch request like 1 sent");
                     fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
@@ -103,6 +98,15 @@ export default {
                     },
                         body: JSON.stringify({like: 1, post: posts[postNumber], userId: userData.userData.userId})
                     })
+                    // test .then to see if the updates work #WORK
+                    .then(fetch("http://localhost:4000/api/posts", {method: 'GET', 
+                            headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'}})
+                        .then(response => response.json())
+                        .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
+                        .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
+                    )
                 }
             } else {
                 console.log("not connected")
