@@ -51,7 +51,6 @@ export default {
             this.$router.push({name: 'Home'})
         },
         LikeRequest() {
-            /* Problem is -> localstorage data is not uploaded so it sends in the wrong data */
             if (this.loggedIn == true) {
                 console.log("like Request has been sent");
                 const userData = JSON.parse(localStorage.getItem('userData'));
@@ -60,7 +59,6 @@ export default {
                 console.log("LOGGED -> " , posts[postNumber]);
                 for (let n = 0; n < posts[postNumber].usersLiked.length; n++) {
                     // Checks inside the usersLiked array of the post if the user has already liked the post
-                    // console.log this loop because it doesn't send the right thing to the backend
                     if (posts[postNumber].usersLiked[n] == userData.userData.userId) {
                         console.log("userData.userData.userId -> " , userData.userData.userId);
                         console.log("posts[MACHIN].machin -> " , posts[postNumber].usersLiked[n]);
@@ -79,7 +77,6 @@ export default {
                     },
                         body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
                     })
-                    // test .then to see if the updates work #WORK
                     .then(fetch("http://localhost:4000/api/posts", {method: 'GET', 
                             headers: {
                             'Accept': 'application/json',
@@ -98,7 +95,6 @@ export default {
                     },
                         body: JSON.stringify({like: 1, post: posts[postNumber], userId: userData.userData.userId})
                     })
-                    // test .then to see if the updates work #WORK
                     .then(fetch("http://localhost:4000/api/posts", {method: 'GET', 
                             headers: {
                             'Accept': 'application/json',
@@ -119,14 +115,51 @@ export default {
                 const posts = JSON.parse(localStorage.getItem("postArray"));
                 const postNumber = JSON.parse(localStorage.getItem("postNumber"));
                 console.log("LOGGED -> " , posts[postNumber]);
-                fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
-                headers: {
-                'Accept' : 'application/json',
-                'Content-Type': 'application/json',
-                'authorization': userData.userData.token
-            },
-             body: JSON.stringify({like: -1, post: posts[postNumber], userId: userData.userData.userId})
-            })
+                for (let n = 0; n < posts[postNumber].usersDisliked.length; n++) {
+                    // Checks inside the usersDisliked array of the post if the user has already liked the post
+                    if (posts[postNumber].usersDisliked[n] == userData.userData.userId) {
+                        console.log("userData.userData.userId -> " , userData.userData.userId);
+                        console.log("posts[MACHIN].machin -> " , posts[postNumber].usersDisliked[n]);
+                        this.disliked = true;  
+                        console.log("this.disliked set to true");
+                    }
+                }
+                if (this.disliked == true) {
+                    // #WORK check if this part works
+                    fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
+                    headers: {
+                    'Accept' : 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization': userData.userData.token
+                    },
+                    body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
+                    })
+                    .then(fetch("http://localhost:4000/api/posts", {method: 'GET', 
+                            headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'}})
+                        .then(response => response.json())
+                        .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
+                        .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
+                    )
+                } else {
+                    fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
+                    headers: {
+                    'Accept' : 'application/json',
+                    'Content-Type': 'application/json',
+                    'authorization': userData.userData.token
+                    },
+                    body: JSON.stringify({like: -1, post: posts[postNumber], userId: userData.userData.userId})
+                    })
+                    .then(fetch("http://localhost:4000/api/posts", {method: 'GET', 
+                            headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'}})
+                        .then(response => response.json())
+                        .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
+                        .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
+                    )
+                }
             } else {
                 console.log("not connected")
             }

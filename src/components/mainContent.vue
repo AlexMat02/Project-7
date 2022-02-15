@@ -92,7 +92,6 @@ export default {
             // Check if the user is logged in (useful for other)
             const userData = JSON.parse(localStorage.getItem("userData"));
             this.$store.dispatch('expChecker' , {userData});
-            // #WORK -> make sure that posts not read by the user are displayed in different color or whatever
             // check if user is logged in
             const expCheck = localStorage.getItem('expChecking');
             console.log("expChecking -> " , expCheck)

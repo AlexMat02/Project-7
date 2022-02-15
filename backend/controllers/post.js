@@ -96,18 +96,9 @@ exports.updatePost = (req, res) => {
 }
 
 exports.likedPost = (req, res) => {
-    console.log("LOGGED post.body -> " , req.body);
-    console.log("LOGGED post.like -> " , req.body.like);
-    console.log("LOGGED req.params -> " , req.params);
-    console.log("we went there-1");
     Post.findOne({ _id: req.params.id}).then(
         (post) => {
-            console.log("we went there-1");
-            console.log("REQ.BODY -> " , req.body);
-            console.log("LOGGED post.body._id -> " , req.body._id); // Undefined
-            console.log("post._id found -> " , post._id);
             if (req.body.like === 1) {
-                console.log("we went there-1");
                 post.usersLiked.push(req.body.userId)
                 const ppost = new Post({
                     _id: post._id,
@@ -121,12 +112,8 @@ exports.likedPost = (req, res) => {
                     usersLiked: post.usersLiked,
                     usersDisliked: post.usersDisliked 
                 })
-                console.log("ppost._id -> " , ppost._id);
-                console.log("ppost -> " , ppost);
-                console.log("we went there-2");
                 Post.updateOne({_id: req.params.id}, ppost).then(
                     () => {
-                        console.log("Logged post READ-1-1 : " , ppost);
                         res.status(200).json({
                             message: "Post Liked"
                         });
@@ -134,8 +121,6 @@ exports.likedPost = (req, res) => {
                 )
             } else if (req.body.like === 0) {
                 for (n = 0; n < post.likes; n++) {
-                    console.log("into like === 0")
-                    console.log("logged req.body.userId -> " , req.body.userId)
                     if ( post.usersLiked[n] == req.body.userId ) {
                         post.usersLiked.splice(n, 1)
                         const ppost = new Post({
@@ -150,8 +135,6 @@ exports.likedPost = (req, res) => {
                             usersLiked: post.usersLiked,
                             usersDisliked: post.usersDisliked 
                         })
-                        console.log("Logged post after remove : " , ppost);
-                        console.log("we went there 4")
                         Post.updateOne({_id: req.params.id}, ppost).then(
                             () => {
                                 res.status(200).json({
@@ -187,7 +170,6 @@ exports.likedPost = (req, res) => {
                 }
             } else if (req.body.like === -1) {
                 post.usersDisliked.push(req.body.userId);
-                console.log("Logged post.usersDisliked : " ,post.usersDisliked)
                 const ppost = new Post({
                     _id: post._id,
                     userId: post.userId,
@@ -200,7 +182,6 @@ exports.likedPost = (req, res) => {
                     usersLiked: post.usersLiked,
                     usersDisliked: post.usersDisliked 
                 })
-                console.log("Logged ppost after adding DISLIKE : " , ppost);
                 Post.updateOne({_id: req.params.id}, ppost).then(
                     () => {
                         res.status(200).json({

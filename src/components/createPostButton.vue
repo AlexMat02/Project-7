@@ -27,7 +27,6 @@ export default {
             this.loggedIn = false;
             console.log("loggedIn has been set to false");
         }
-        // check if loggedIn works fine #WORK
     }
 }
 </script>
