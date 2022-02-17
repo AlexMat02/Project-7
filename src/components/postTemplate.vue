@@ -19,6 +19,7 @@
                     <button class="btn__like btn__like-delete" v-if="loggedIn == true" @click="deleteRequest()"><h3> Delete</h3></button>
                 </div>
             </div>
+            <img id="imgHTML">
         </div>
     </div>
 </template>
@@ -85,6 +86,7 @@ export default {
                         .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
                         .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
                     )
+                    this.postLikes = posts[postNumber].likes;
                 } else {
                     console.log("fetch request like 1 sent");
                     fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
@@ -103,6 +105,7 @@ export default {
                         .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
                         .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
                     )
+                    this.postLikes = posts[postNumber].likes;
                 }
             } else {
                 console.log("not connected")
@@ -142,6 +145,7 @@ export default {
                         .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
                         .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
                     )
+                   this.postDislikes = posts[postNumber].dislikes;
                 } else {
                     fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
                     headers: {
@@ -159,6 +163,7 @@ export default {
                         .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
                         .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
                     )
+                   this.postDislikes = posts[postNumber].dislikes;
                 }
             } else {
                 console.log("not connected")
@@ -183,11 +188,13 @@ export default {
         const title = document.getElementById("postTitle");
         const type = document.getElementById("postType");
         const text = document.getElementById("postText");
+        const imgHTML = document.getElementById("imgHTML");
         this.postLikes = posts[postNumber].likes;
         this.postDislikes = posts[postNumber].dislikes;
         title.innerHTML = posts[postNumber].title;
         type.innerHTML = posts[postNumber].type;
         text.innerHTML = posts[postNumber].content;
+        imgHTML.src = posts[postNumber].img;
         // getting userData and checking if user's logged in
         const userData = JSON.parse(localStorage.getItem('userData'));
         this.$store.dispatch('expChecker' , {userData})

@@ -6,7 +6,7 @@
                 <h2> Title </h2>
                 <input class="inputBar">
                 <h2> Type </h2>
-                <select v-on:change="test()" class="inputBar dropDownMenu">
+                <select class="inputBar dropDownMenu">
                     <option> Work </option>
                     <option> Fun </option>
                 </select>
@@ -49,7 +49,7 @@ export default ({
                     console.log( "type -> " , typeInput)
                     console.log( "content -> " , contentInput.value )
                     console.log( "img -> " , imgInput.value )
-                    const postContent = {
+                    let postContent = {
                         title: titleInput.value,
                         type: typeInput,
                         content: contentInput.value,
@@ -63,7 +63,7 @@ export default ({
                     myHeaders.append('Authorization', userData.userData.token);
                     fetch("http://localhost:4000/api/posting", {method: 'POST', 
                         headers: myHeaders,
-                        body: JSON.stringify(postContent, userData.userData.userId)})
+                        body: JSON.stringify({post: postContent}, userData.userData.userId)})
                     .then(console.log("fetch request send"))
                     this.$router.push({name: 'Home'})
                 } else if (titleInput.value == ""){
@@ -81,12 +81,6 @@ export default ({
                 console.log("TEST-1 returned false")
                 return false;
             }
-        },
-        test() {
-            const typeInput = document.getElementsByClassName("inputBar")[1].value;
-            console.log("typeINput" , typeInput)
-            console.log("aa -> " , document.getElementsByClassName("inputBar")[1])
-            console.log("aabb -> " , document.getElementsByClassName("inputBar")[1].value)
         },
     }
 })
@@ -115,5 +109,40 @@ export default ({
 }
 .dropDownMenu:hover{
     cursor: pointer;
+}
+.btn-classic{
+    appearance: none;
+    border: 2px rgb(155, 190, 255) solid;
+    border-radius: 30%;
+    background-color: white;
+    margin: 1rem;
+    width: fit-content;
+    height: fit-content;
+}
+.btn-classic:hover{
+    animation-name: buttonHover;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    cursor: pointer;
+}
+@keyframes buttonHover {
+    0% {background-color: white;}
+    100% {background-color: rgb(155, 190, 255);}
+}
+.inputBar{
+    appearance: none;
+    border: 2px rgb(155, 190, 255) solid;
+    width: 19rem;
+    height: 2rem;
+    font-size: large;
+    resize: none;
+    overflow: auto;
+}
+.linkFIX, .linkFIX:visited, .linkFIX:hover, .linkFIX:link{
+    appearance: none;
+    border: none;
+    text-decoration: none;
+    color: black;
 }
 </style>
