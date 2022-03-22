@@ -1,34 +1,13 @@
 const Post = require("../models/post");
 var db = require('../dbConnections');
+const user = require("../models/user");
 var connection = db();
 
 exports.createPost = (req, res) => {
-    console.log("Logged request.body -> " , req.body);
-<<<<<<< Updated upstream
-    const post = new Post({
-        title: req.body.title,
-        type: req.body.type,
-        content: req.body.content,
-        img: req.body.img,
-        userId: req.body.userId,
-        likes: 0,
-        dislikes: 0,
-        usersLiked: [],
-        usersDisliked: [],
-    });
-    post.save().then(
-        () => {
-            res.status(201).json({message : "post saved"})
-        }
-    ).catch(
-        (err) => {
-            res.status(400).json(
-                {error: err}
-            )
-        }
-    )
-=======
-    const {title, type, content, img, userId} = req.body;
+    const postData = req.body;
+    console.log("Logged postData in the correct way -> " , postData.post);
+    const {title, type, content, img, userId} = postData.post;
+    console.log("LOGGED title " , title , "LOGGED type " , type , "LOGGED userId " , userId);
     // #WORK
     try {
         connection.query("INSERT INTO post (title, type, content, img, User_id_User) VALUES (?, ?, ?, ?, ?)", [title, type, content, img, userId], (err, results, fields) => {
@@ -42,7 +21,6 @@ exports.createPost = (req, res) => {
         console.log("Error on createPost -> " , err);
         return res.status(500).send()
     }
->>>>>>> Stashed changes
 }
 
 exports.getAllPost = (req, res) => {

@@ -14,11 +14,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.2",
     "mongoose-unique-validator": "^3.0.0",
-<<<<<<< Updated upstream
-=======
     "multer": "^1.4.4",
     "mysql": "^2.18.1",
->>>>>>> Stashed changes
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"

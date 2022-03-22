@@ -10,7 +10,6 @@
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur debitis qui, totam earum, dolore impedit atque exercitationem quidem eveniet facilis ipsam, doloribus sequi accusamus cum consequuntur tenetur nesciunt at. Consequatur.
             </p>
             <div class="divContent__top">
-                <input class="input-classic" placeholder="Share your thoughts..." v-on:keyup.enter="commentCreator">
                 <div class="divContent__btnstack">
                     <h3> {{ postLikes }} </h3>
                     <button class="btn__like btn__like-green" @click="LikeRequest()"><h3> Like </h3></button>
@@ -43,7 +42,8 @@ export default {
             const posts = JSON.parse(localStorage.getItem("postArray"));
             const postNumber = JSON.parse(localStorage.getItem("postNumber"));
             console.log("LOGGED -> " , posts[postNumber]);
-            fetch(`http://localhost:4000/api/posts/${posts[postNumber]._id}`, {method: 'DELETE',
+            console.log("LOGGED -> " , posts[postNumber].User_id_User);
+            fetch(`http://localhost:4000/api/posts/${posts[postNumber].User_id_User}`, {method: 'DELETE',
             headers: {
                 'Accept' : 'application/json',
                 'Content-Type': 'application/json',
@@ -201,7 +201,8 @@ export default {
         const expCheck = localStorage.getItem('expChecking');
         console.log("expChecking -> " , expCheck)
         console.log("LOGGED userData -> " , userData);
-        if (userData != null && posts[postNumber].userId == userData.userData.userId) {
+        console.log("LOGGED posts -> " , posts[postNumber]);
+        if (userData != null && posts[postNumber].User_id_User == userData.userData.userId) {
             console.log("user has created this")
             if (expCheck == "true") {
                 // user is logged in
@@ -228,7 +229,8 @@ export default {
                 /// use a for loop to check if the user has seen this post
                 let postSighted = false;
                 console.log("postSighted BROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-                console.log("machin machin -> " , allUserArray[correctUserIndex].postsSighted);
+                // #WORK postsSighted here
+                /* console.log("machin machin -> " , allUserArray[correctUserIndex].postsSighted);
                 for (let b = 0; b < allUserArray[correctUserIndex].postsSighted.length; b++) {
                     console.log("read for loop b");
                     if (allUserArray[correctUserIndex].postsSighted[b] == posts[postNumber]._id) {
@@ -236,10 +238,11 @@ export default {
                         postSighted = true;
                         console.log("postSighted = true");
                     }
-                }
+                } */
                 /// if he did do nothing
                 /// if he didnt add it inside postsSighted Array
-                if (postSighted === false) {
+                // #WORK postsSighted here
+               /*  if (postSighted === false) {
                     console.log("postSighted = false");
                     console.log("logged userData.userData.userId -> " , userData.userData.userId);
                     fetch(`http://localhost:4000/auth/postSighted/${userData.userData.userId}`, {method: 'POST', 
@@ -250,7 +253,7 @@ export default {
                         ,body: JSON.stringify({post: posts[postNumber]})})
                     .then(response => response.json())
                     .then(res => console.log("LOGGED ANSWER -> " , res))
-                }
+                } */
             } else {
                 // user is not logged in
                 this.loggedIn = false;

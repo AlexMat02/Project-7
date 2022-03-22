@@ -112,7 +112,8 @@ export default {
                             correctUser = n;
                         }
                     }
-                    const postsSightedLength = AllUsers[correctUser].postsSighted.length;
+                    // #WORK postsSighted here
+                    /* const postsSightedLength = AllUsers[correctUser].postsSighted.length;
                     const didier = [];
                     for (let x = 0; x < postsSightedLength; x++) {
                         for (let w = 0; w < posts.length; w++) {
@@ -127,7 +128,7 @@ export default {
                     for (let c = 0; c < didier.length; c++) {
                         let card = document.getElementById(didier[c]);
                         card.style.backgroundColor = "#E2B6C7";
-                    }
+                    } */
                 } else {
                     // user is not logged in
                     this.loggedIn = false;
