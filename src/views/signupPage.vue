@@ -11,7 +11,7 @@
                 </div>
                 <div>
                     <h2> Password </h2>
-                    <input v-model="password" class="inputBar">
+                    <input v-model="password" type="password" class="inputBar">
                 </div>
                 <div>
                     <h2> Username </h2>

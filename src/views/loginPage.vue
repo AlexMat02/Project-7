@@ -33,7 +33,7 @@ export default({
             const emailInput = document.getElementsByClassName("inputBar")[0];
             const passwordInput = document.getElementsByClassName("inputBar")[1];
             const userInfos = {
-                email: emailInput.value,
+                username: emailInput.value,
                 password: passwordInput.value,
             }
             const currentDate = new Date();
