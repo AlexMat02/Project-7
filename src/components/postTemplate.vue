@@ -195,7 +195,11 @@ export default {
         title.innerHTML = posts[postNumber].title;
         type.innerHTML = posts[postNumber].type;
         text.innerHTML = posts[postNumber].content;
-        imgHTML.src = posts[postNumber].img;
+        if (posts[postNumber].img == undefined || posts[postNumber].img == null) {
+            console.log("no img avaible for this post")
+        } else {
+            imgHTML.src = posts[postNumber].img;
+        }
         // getting userData and checking if user's logged in
         const userData = JSON.parse(localStorage.getItem('userData'));
         this.$store.dispatch('expChecker' , {userData})
@@ -210,51 +214,47 @@ export default {
                 this.loggedIn = true;
                 console.log("loggedIn set to true");
                 // This part is for unread posts
-                /// fetch the userData
-                // fetches all User Data
-                fetch("http://localhost:4000/auth/users", {method: 'GET', 
-                    headers: {
+                // fetch the table of all of the post sighted
+                fetch(`http://localhost:4000/auth/whichPostsSighted/${userData.userData.userId}`, {method: 'GET',
+                headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'}})
+                    'Content-Type': 'application/json',
+                    'authorization': userData.userData.token}})
                 .then(response => response.json())
-                .then(res => localStorage.setItem("allUserArray", JSON.stringify(res)))
-                .then(console.log("AllUsers Array -> " , JSON.parse(localStorage.getItem("allUserArray"))))
-                let allUserArray = JSON.parse(localStorage.getItem("allUserArray"));
-                // find the correct user
-                let correctUserIndex = 0;
-                for (let a = 0; a < allUserArray.length; a++) {
-                    if (allUserArray[a]._id == userData.userData.userId) {
-                        correctUserIndex = a;
+                .then(res => localStorage.setItem("whichPostsSighted", JSON.stringify(res)))
+                .then(console.log("PostsSighted table -> " , JSON.parse(localStorage.getItem("whichPostsSighted"))));
+                let whichPostsSighted = JSON.parse(localStorage.getItem("whichPostsSighted"));
+                // if the array whichPostsSighted is empty it adds the post to the post sighted
+                if (whichPostsSighted.length == 0) {
+                    fetch(`http://localhost:4000/auth/postSighted`, {method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'authorization': userData.userData.token},
+                        body: JSON.stringify({post: posts[postNumber], userId: userData.userData.userId})
+                    })
+                } else {
+                    let seen = false;
+                    // Checks every data inside the seen table
+                    for (let b = 0; b < whichPostsSighted.length; b++) {
+                        console.log("reading b for the loop -> ", b);
+                        // if the id_Post of the post that is displayed is the same as
+                        // the Post_id_Post inside the seen table that means the post has been sighted
+                        if (whichPostsSighted[b].Post_id_Post == posts[postNumber].id_Post) {
+                            seen = true;
+                        }
+                        console.log("LOGGED let seen -> ", seen)
+                    }
+                    if (seen == false) {
+                        fetch(`http://localhost:4000/auth/postSighted`, {method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'authorization': userData.userData.token},
+                        body: JSON.stringify({post: posts[postNumber], userId: userData.userData.userId})
+                        })
                     }
                 }
-                /// use a for loop to check if the user has seen this post
-                let postSighted = false;
-                console.log("postSighted BROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-                // #WORK postsSighted here
-                /* console.log("machin machin -> " , allUserArray[correctUserIndex].postsSighted);
-                for (let b = 0; b < allUserArray[correctUserIndex].postsSighted.length; b++) {
-                    console.log("read for loop b");
-                    if (allUserArray[correctUserIndex].postsSighted[b] == posts[postNumber]._id) {
-                        // user has seen the post
-                        postSighted = true;
-                        console.log("postSighted = true");
-                    }
-                } */
-                /// if he did do nothing
-                /// if he didnt add it inside postsSighted Array
-                // #WORK postsSighted here
-               /*  if (postSighted === false) {
-                    console.log("postSighted = false");
-                    console.log("logged userData.userData.userId -> " , userData.userData.userId);
-                    fetch(`http://localhost:4000/auth/postSighted/${userData.userData.userId}`, {method: 'POST', 
-                        headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'authorization': userData.userData.token}
-                        ,body: JSON.stringify({post: posts[postNumber]})})
-                    .then(response => response.json())
-                    .then(res => console.log("LOGGED ANSWER -> " , res))
-                } */
             } else {
                 // user is not logged in
                 this.loggedIn = false;

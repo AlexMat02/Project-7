@@ -1,6 +1,4 @@
-const Post = require("../models/post");
 var db = require('../dbConnections');
-const user = require("../models/user");
 var connection = db();
 
 exports.createPost = (req, res) => {
@@ -8,6 +6,8 @@ exports.createPost = (req, res) => {
     console.log("Logged postData in the correct way -> " , postData.post);
     const {title, type, content, img, userId} = postData.post;
     console.log("LOGGED title " , title , "LOGGED type " , type , "LOGGED userId " , userId);
+    // There was a problem inside this request, it gave me CANNOT GET with the wrong url request
+    // The problem was a bad request (400)
     // #WORK
     try {
         connection.query("INSERT INTO post (title, type, content, img, User_id_User) VALUES (?, ?, ?, ?, ?)", [title, type, content, img, userId], (err, results, fields) => {
@@ -93,107 +93,25 @@ exports.updatePost = (req, res) => {
 }
 
 exports.likedPost = (req, res) => {
-    // #WORK need to change it to SQL
-    Post.findOne({ _id: req.params.id}).then(
-        (post) => {
-            if (req.body.like === 1) {
-                post.usersLiked.push(req.body.userId)
-                const ppost = new Post({
-                    _id: post._id,
-                    userId: post.userId,
-                    title: post.title,
-                    content: post.content,
-                    img: post.img,
-                    type: post.type,
-                    likes: post.likes += 1,
-                    dislikes: post.dislikes,
-                    usersLiked: post.usersLiked,
-                    usersDisliked: post.usersDisliked 
-                })
-                Post.updateOne({_id: req.params.id}, ppost).then(
-                    () => {
-                        res.status(200).json({
-                            message: "Post Liked"
-                        });
-                    }
-                )
-            } else if (req.body.like === 0) {
-                for (n = 0; n < post.likes; n++) {
-                    if ( post.usersLiked[n] == req.body.userId ) {
-                        post.usersLiked.splice(n, 1)
-                        const ppost = new Post({
-                            _id: post._id,
-                            userId: post.userId,
-                            title: post.title,
-                            content: post.content,
-                            img: post.img,
-                            type: post.type,
-                            likes: post.likes -= 1,
-                            dislikes: post.dislikes,
-                            usersLiked: post.usersLiked,
-                            usersDisliked: post.usersDisliked 
-                        })
-                        Post.updateOne({_id: req.params.id}, ppost).then(
-                            () => {
-                                res.status(200).json({
-                                    message: "post Liked Removed"
-                                });
-                            }
-                        )
-                    }
-                }
-                for (a = 0; a < post.dislikes; a++) {
-                    if (post.usersDisliked[a]  == req.body.userId ) {
-                        post.usersDisliked.splice(a, 1)
-                        const ppost = new Post({
-                            _id: post._id,
-                            userId: post.userId,
-                            title: post.title,
-                            content: post.content,
-                            img: post.img,
-                            type: post.type,
-                            likes: post.likes,
-                            dislikes: post.dislikes -= 1,
-                            usersLiked: post.usersLiked,
-                            usersDisliked: post.usersDisliked 
-                        })
-                        Post.updateOne({_id: req.params.id}, ppost).then(
-                            () => {
-                                res.status(200).json({
-                                    message: "Post disliked removed"
-                                });
-                            }
-                        )
-                    }
-                }
-            } else if (req.body.like === -1) {
-                post.usersDisliked.push(req.body.userId);
-                const ppost = new Post({
-                    _id: post._id,
-                    userId: post.userId,
-                    title: post.title,
-                    content: post.content,
-                    img: post.img,
-                    type: post.type,
-                    likes: post.likes,
-                    dislikes: post.dislikes += 1,
-                    usersLiked: post.usersLiked,
-                    usersDisliked: post.usersDisliked 
-                })
-                Post.updateOne({_id: req.params.id}, ppost).then(
-                    () => {
-                        res.status(200).json({
-                            message: "Post Disliked"
-                        });
-                    }
-                )
-            };
-        }
-    ).catch(
-        () => {
-            res.status(400).json({
-                error: "An error as occured"
-            });
-        }
-    )
+    // #WORK need to see if SQL work + need to delete old
+    // I might need to add a way to check if it already exists, then the query will change into update
+    console.log("logged req.body -> ", req.body);
+    // body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
+    const userId = req.body.userId;
+    const post = req.body.post;
+    console.log("LOGGED userId -> ", userId);
+    console.log("LOGGED post -> ", post);
+    try {
+        console.log("User has liked the post");
+        connection.query("INSERT INTO liked (Liked, User_id_User, Post_id_Post) VALUES (?, ?, ?)", [req.body.like, userId, post.id_Post], (err, results, fields) => {
+            if (err) {
+                console.log("An error has occured during the request likedPost -> ", err);
+                return res.status(400).send()
+            }
+            return res.status(200).json({ message: 'Post liked/disliked'})
+        })
+    } catch {
+        console.log("An error has occured for the request likedPost -> ", err);
+        return res.status(500).send()
+    }
 };
