@@ -16,6 +16,7 @@
                     <h3> {{ postDislikes }} </h3>
                     <button class="btn__like btn__like-red" @click="DislikeRequest()"><h3> Dislike </h3></button>
                     <button class="btn__like btn__like-delete" v-if="loggedIn == true" @click="deleteRequest()"><h3> Delete</h3></button>
+                    <button class="btn__like btn__like-update" v-if="loggedIn == true" ><h3> Update</h3></button>
                 </div>
             </div>
             <img id="imgHTML">
@@ -303,6 +304,13 @@ export default {
 }
 .btn__like-delete:hover{
     background-color: rgb(173, 0, 173);
+    cursor: pointer;
+}
+.btn__like-update{
+    background-color: rgb(92, 113, 230);
+}
+.btn__like-update:hover{
+    background-color: rgb(125, 142, 243);
     cursor: pointer;
 }
 .pComment{
