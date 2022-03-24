@@ -55,7 +55,6 @@ exports.getOnePost = (req, res) => {
 };
 
 exports.deletePost = (req, res) => {
-    console.log("LOGGED req.params -> " , req.params)
     const postID = req.params.id;
     // this is to delete the Foreign Key inside Liked
     try {
@@ -117,14 +116,8 @@ exports.updatePost = (req, res) => {
 }
 
 exports.likedPost = (req, res) => {
-    // #WORK need further testing + delete comments when finsihed
-    // I need to make it change depending on req.body.like
-    console.log("logged req.body -> ", req.body);
-    // body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
     const userId = req.body.userId;
     const post = req.body.post;
-    console.log("LOGGED userId -> ", userId);
-    console.log("LOGGED post -> ", post);
     let userLikedPosts = "";
     // This is to check if it already exists, then if it does change query
     try {
@@ -179,9 +172,6 @@ exports.likedPost = (req, res) => {
 };
 
 exports.howManyLikes = (req, res) => {
-    // #WORK for some reasons, I don't know why it doesn't let me get params.id
-    // params: { id : '8' },
-    // there is also a problem with JSON.parse ?
     const postId = req.params.id;
     console.log("LOGGED postId -> ", postId);
     try {

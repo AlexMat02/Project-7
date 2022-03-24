@@ -116,7 +116,6 @@ export default {
             }
         },
         DislikeRequest(){
-            // #WORK finish likeRequest, when it's finished just apply it here but in reverse
             if (this.loggedIn == true) {
                 console.log("Dislike Request has been sent");
                 const userData = JSON.parse(localStorage.getItem('userData'));
