@@ -44,13 +44,14 @@ export default {
                 const baseDiv = document.getElementsByClassName("mainContent__container")[0];
                 let mainDiv = document.createElement("div");
                 mainDiv.className = "divContent";
-                mainDiv.id = posts[n]._id;
+                mainDiv.id = "mD" + posts[n].id_Post;
                 let headerDiv = document.createElement("div");
                 headerDiv.className = "divContent__top"
                 let contentDiv = document.createElement("div");
                 contentDiv.className = "divContent__content";
                 let pContent = document.createElement("p");
                 pContent.textContent = posts[n].content;
+                pContent.className = "divContent__text"
                 let headerLogoLink = document.createElement("a");
                 headerLogoLink.href = "/profilExample"
                 headerLogoLink.id = "logo" + n; 
@@ -98,37 +99,30 @@ export default {
             console.log("LOGGED userData -> " , userData);
             if (userData != null) {
                 if (expCheck == "true") {
-                    let correctUser = 0;
                     // user is logged in
                     this.loggedIn = true;
                     console.log("loggedIn set to true");
                     // if not IGNORE
                     // if user is logged in then
-                    // check inside postsSighted if the posts that are displayed are inside this Array
-                        // gets the correct user
-                    const AllUsers = JSON.parse(localStorage.getItem("allUserArray"));
-                    for (let n = 0; n < AllUsers.length; n++) {
-                        if (AllUsers[n]._id == userData.userData.userId) {
-                            correctUser = n;
-                        }
-                    }
-                    // #WORK postsSighted here
-                    /* const postsSightedLength = AllUsers[correctUser].postsSighted.length;
-                    const didier = [];
-                    for (let x = 0; x < postsSightedLength; x++) {
+                    // fetches which post the logged user saw
+                    fetch(`http://localhost:4000/auth/whichPostsSighted/${userData.userData.userId}`, {method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'authorization': userData.userData.token}})
+                    .then(response => response.json())
+                    .then(res => localStorage.setItem("whichPostsSighted", JSON.stringify(res)))
+                    .then(console.log("PostsSighted table -> " , JSON.parse(localStorage.getItem("whichPostsSighted"))));
+                    let whichPostsSighted = JSON.parse(localStorage.getItem("whichPostsSighted"));
+                    // Change seen card background into a different color
+                    for (let x = 0; x < whichPostsSighted.length; x++) {
                         for (let w = 0; w < posts.length; w++) {
-                            if (posts[w]._id == AllUsers[correctUser].postsSighted[x]) {
-                                console.log("post that the user saw -> " , posts[w].title)
-                                didier.push(posts[w]._id)
+                            if (whichPostsSighted[x].Post_id_Post == posts[w].id_Post) {
+                                let card = document.getElementById("mD" + posts[w].id_Post)
+                                card.style.backgroundColor = "#E2B6C7";
                             }
                         }
-                    }
-                    // if not IGNORE
-                    // if yes Change the display of said post
-                    for (let c = 0; c < didier.length; c++) {
-                        let card = document.getElementById(didier[c]);
-                        card.style.backgroundColor = "#E2B6C7";
-                    } */
+                    }           
                 } else {
                     // user is not logged in
                     this.loggedIn = false;
@@ -196,5 +190,10 @@ a, a:hover, a:visited, a:active{
 }
 .divContent__content{
     margin: 5px;
+}
+.divContent__text{
+    overflow: clip;
+    width: 75vw;
+    margin: auto;
 }
 </style>

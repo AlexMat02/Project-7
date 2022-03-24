@@ -24,4 +24,6 @@ router.delete('/api/posts/:id', auth, postCtrl.deletePost);
 
 router.get('/api/posts/:id', postCtrl.getOnePost);
 
+router.get('/api/howManyLikes/:id', postCtrl.howManyLikes);
+
 module.exports = router;
