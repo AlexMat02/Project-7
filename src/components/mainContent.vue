@@ -55,8 +55,18 @@ export default {
                 let headerLogoLink = document.createElement("a");
                 headerLogoLink.href = "/profilExample"
                 headerLogoLink.id = "logo" + n; 
-                let headerLogo = document.createElement("img");
-                headerLogo.className = "divContent__profilImg";
+                let headerLogo = document.createElement("h2");
+                headerLogo.className = "divContent__author";
+                // Find post author
+                const allUsersArray = JSON.parse(localStorage.getItem("allUserArray"))
+                console.log("allUsersArray -> ", allUsersArray);
+                let authorName = ""
+                for (let f = 0; f < allUsersArray.length; f++) {
+                    if (allUsersArray[f].id_User == posts[n].User_id_User) {
+                        authorName = allUsersArray[f].username;
+                    }
+                }
+                headerLogo.innerHTML = authorName;
                 let headerTitle = document.createElement("h2");
                 headerTitle.className = "divContent__header";
                 headerTitle.textContent = posts[n].title;
@@ -86,7 +96,7 @@ export default {
                 // Same thing for profil
                 let currentProfil = document.getElementById("logo" + n);
                 currentProfil.addEventListener("click", () => {
-                    let profilChosen = posts[n].userId;
+                    let profilChosen = posts[n].User_id_User;
                     localStorage.setItem("profilNumber", profilChosen);
             })
             }
@@ -178,15 +188,9 @@ a, a:hover, a:visited, a:active{
 .divContent__filter{
     color: blueviolet !important;
 }
-.divContent__profilImg{
-    margin-left: 5px;
-    margin-right: 5px;
-    object-fit: scale-down;
-    width: 30px;
-    height: 30px;
-    border: 1px solid black;
-    border-radius: 50%;
-    background-color: white;
+.divContent__author{
+    color: blueviolet;
+    margin: 5px;
 }
 .divContent__content{
     margin: 5px;

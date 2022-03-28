@@ -7,6 +7,7 @@
             </div>
             <div class="profilContainer__description">
                 <p class="editableP"> {{ editingText }} </p>
+                <input id="input">
             </div>
             <button v-if="this.loggedIn == true" class="btn-classic btn__reverse" @click="editing"><h3> Edit </h3></button>
             <button v-if="this.loggedIn == true" class="btn-classic btn__reverse" @click="deleteRequest()"><h3> Delete Profil </h3></button>
@@ -38,27 +39,65 @@ export default {
             this.$router.push({name: 'Home'})
         },
         editingSwitch(){
-            const inputEdit = document.getElementsByTagName("input")[1];
-            const container = document.getElementsByClassName("profilContainer__description")[0];
-            const pCreator = document.createElement("p");
-            pCreator.classList.add("editableP");
+            const inputEdit = document.getElementById("input");
+            const pProfil = document.getElementsByClassName("editableP");
             this.editingText = inputEdit.value;
-            pCreator.innerText = this.editingText;
-            container.removeChild(inputEdit);
-            container.appendChild(pCreator);
+            pProfil[0].innerText = this.editingText;
+            inputEdit.style.display = "none";
+            pProfil[0].style.display = "block";
             this.isEditing = false;
+            // This is the part to check if user logged-in
+            fetch("http://localhost:4000/auth/users", {method: 'GET', 
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'}})
+            .then(response => response.json())
+            .then(res => localStorage.setItem("userArray", JSON.stringify(res)))
+            .then(console.log("LOGGED array of all users -> " , JSON.parse(localStorage.getItem("userArray"))));
+            const userArray = JSON.parse(localStorage.getItem("userArray"));
+            const correctProfil = localStorage.getItem("profilNumber");
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            let profilIndex;
+            for (let n = 0; n < userArray.length; n++) {
+                if (userArray[n].id_User == correctProfil) {
+                    profilIndex = n;
+                    console.log("LOGGED profilIndex -> " , profilIndex);
+                } else {
+                    console.log("not this one")
+                    console.log("LOGGED WHILE profilIndex -> " , profilIndex);
+                }
+            }
+            console.log("LOGGED userArray[profilIndex] -> " , userArray[profilIndex])
+            this.$store.dispatch('expChecker' , {userData})
+            const expCheck = localStorage.getItem('expChecking');
+            if (expCheck == "true") {
+                // user is logged in
+                this.loggedIn = true;
+                console.log("loggedIn set to true");
+                // This is the request to update it to the database
+                fetch(`http://localhost:4000/auth/userDescription/${userArray[profilIndex].id_User}`, {method: 'POST',
+                    headers: {
+                        'Accept' : 'application/json',
+                        'Content-Type': 'application/json',
+                        'authorization': userData.userData.token
+                    },
+                        body: JSON.stringify({description: this.editingText})
+                })
+            } else {
+                // user is not logged in
+                this.loggedIn = false;
+                console.log("loggedIn set to false");
+            }
         },
         editing(){
             if (this.isEditing === false) {
                 this.isEditing = true;
                 const pProfil = document.getElementsByClassName("editableP");
-                const container = document.getElementsByClassName("profilContainer__description")[0];
-                const inputCreator = document.createElement("input");
-                inputCreator.classList.add("input");
+                const inputCreator = document.getElementById("input");
                 this.editingText = pProfil[0].innerText;
                 inputCreator.value = this.editingText;
-                container.removeChild(pProfil[0]);
-                container.appendChild(inputCreator);
+                pProfil[0].style.display = "none";
+                inputCreator.style.display = "block";
             } else if (this.isEditing === true) {
                 this.editingSwitch();
             }
@@ -82,9 +121,9 @@ export default {
         const correctProfil = localStorage.getItem("profilNumber");
         console.log("LOGGED correctProfil -> " , correctProfil);
         // Find the correct index of the user inside userArray
-        let profilIndex = 0;
+        let profilIndex;
         for (let n = 0; n < userArray.length; n++) {
-            if (userArray[n]._id == correctProfil) {
+            if (userArray[n].id_User == correctProfil) {
                 profilIndex = n;
                 console.log("LOGGED profilIndex -> " , profilIndex);
             } else {
@@ -127,10 +166,11 @@ export default {
 </script>
 
 <style>
-.input{
+#input{
     box-sizing: border-box;
     width: 100%;
     height: 85%;
+    display: none;
 }
 .btn__reverse{
     appearance: none;

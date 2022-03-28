@@ -2,7 +2,7 @@
     <div class="mainContent__container">
         <div class="divContent">
             <div class="divContent__top">
-                <router-link to="/profilExample"><img class="divContent__profilImg" src="../assets/logo.png"></router-link>
+                <router-link to="/profilExample" id="postAuthor" class="divContent__header"><h2 ></h2></router-link>
                 <h2 class="divContent__header" id="postTitle">Example Title</h2>
                 <h2 class="divContent__header divContent__filter" id="postType"> Fun </h2>
             </div>
@@ -197,6 +197,7 @@ export default {
         const title = document.getElementById("postTitle");
         const type = document.getElementById("postType");
         const text = document.getElementById("postText");
+        const author = document.getElementById("postAuthor");
         const imgHTML = document.getElementById("imgHTML");
         // This part is here to display how many likes a post has
         fetch(`http://localhost:4000/api/howManyLikes/${posts[postNumber].id_Post}`, {method: 'GET', 
@@ -220,6 +221,16 @@ export default {
         title.innerHTML = posts[postNumber].title;
         type.innerHTML = posts[postNumber].type;
         text.innerHTML = posts[postNumber].content;
+        // get the post's author
+        const allUsersArray = JSON.parse(localStorage.getItem("allUserArray"))
+        console.log("allUsersArray -> ", allUsersArray);
+        let authorName = ""
+        for (let f = 0; f < allUsersArray.length; f++) {
+            if (allUsersArray[f].id_User == posts[postNumber].User_id_User) {
+                authorName = allUsersArray[f].username;
+            }
+        }
+        author.innerHTML = authorName;
         if (posts[postNumber].img == undefined || posts[postNumber].img == null) {
             console.log("no img avaible for this post")
         } else {

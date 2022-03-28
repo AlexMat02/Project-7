@@ -12,5 +12,6 @@ router.get('/auth/users', userCtrl.getAllUser);
 router.post('/auth/postSighted', auth, userCtrl.postSighted);
 router.get('/auth/whichPostsSighted/:id', auth, userCtrl.whichPostsSighted);
 router.get('/auth/whichPostsLiked/:id', auth, userCtrl.whichPostsLiked);
+router.post('/auth/userDescription/:id', auth, userCtrl.changeDescription);
 
 module.exports = router;

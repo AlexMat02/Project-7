@@ -123,6 +123,23 @@ exports.getAllUser = (req, res) => {
     }
 }
 
+exports.changeDescription = (req, res) => {
+    const userId = req.params.id;
+    const newDescription = req.body.description;
+    try {
+        connection.query("UPDATE user SET description = ? WHERE id_User = ?", [newDescription, userId], (err, results, fields) => {
+            if (err) {
+                console.log("An error has occured during changeDescription request -> ", err);
+                return res.status(400).send()
+            }
+            res.status(200).send()
+        })
+    } catch {
+        console.log("An error has occured for changeDescription request -> ", err);
+        return res.status(500).send()
+    }
+}
+
 exports.postSighted = (req, res) => {
     const userId = req.body.userId;
     const postId = req.body.post.id_Post;
