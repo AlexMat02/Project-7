@@ -16,7 +16,7 @@
                     <h3> {{ postDislikes }} </h3>
                     <button class="btn__like btn__like-red" @click="DislikeRequest()"><h3> Dislike </h3></button>
                     <button class="btn__like btn__like-delete" v-if="loggedIn == true" @click="deleteRequest()"><h3> Delete</h3></button>
-                    <button class="btn__like btn__like-update" v-if="loggedIn == true" ><h3> Update</h3></button>
+                    <button class="btn__like btn__like-update" v-if="loggedIn == true" @click="updateRequest()"><h3> Update</h3></button>
                 </div>
             </div>
             <img id="imgHTML">
@@ -51,6 +51,10 @@ export default {
                 'authorization': userData.userData.token
             }})
             this.$router.push({name: 'Home'})
+        },
+        updateRequest() {
+            localStorage.setItem("isUpdating", true);
+            this.$router.push({name: 'postCreationPage'})
         },
         LikeRequest() {
             if (this.loggedIn == true) {

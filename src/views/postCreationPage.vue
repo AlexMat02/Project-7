@@ -15,7 +15,8 @@
                 <h2> Image URL </h2>
                 <input type="file" class="inputBar">
             </div>
-            <button class="btn-classic" id="btn-post" @click="postCreator()"> Submit Post </button>
+            <button class="btn-classic" id="btn-post" @click="postCreator()" v-if="this.updating === false"> Submit Post </button>
+            <button class="btn-classic" id="btn-post" @click="updatePost()" v-if="this.updating === true"> Update Post </button>
         </div>
     </div>
 </template>
@@ -25,6 +26,11 @@ import header1 from '@/components/header1.vue'
 
 export default ({
     name: "postCreationPage",
+    data() {
+        return {
+            updating: false
+        }
+    },
     components: {
         header1,
     },
@@ -82,6 +88,60 @@ export default ({
                 return false;
             }
         },
+        updatePost() {
+            localStorage.removeItem("isUpdating");
+            const posts = JSON.parse(localStorage.getItem("postArray"));
+            const postNumber = JSON.parse(localStorage.getItem("postNumber"));
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            this.$store.dispatch('expChecker' , {userData});
+            const expCheck = localStorage.getItem('expChecking');
+            console.log("expChecking from header -> " , expCheck);
+            const titleInput = document.getElementsByClassName("inputBar")[0];
+            const typeInput = document.getElementsByClassName("inputBar")[1].value;
+            console.log("typeINput.value -> " , typeInput);
+            const contentInput = document.getElementsByClassName("inputBar")[2];
+            const imgInput = document.getElementsByClassName("inputBar")[3];
+            if (expCheck == "true") {
+                // user is logged in
+                this.loggedIn = true;
+                console.log("loggedIn has been set to true");
+                fetch(`http://localhost:4000/api/updatePost/${posts[postNumber].id_Post}`, {method: 'PUT',
+                    headers: {
+                        'Accept' : 'application/json',
+                        'Content-Type': 'application/json',
+                        'authorization': userData.userData.token
+                    },
+                    body: JSON.stringify({title: titleInput.value, type: typeInput, content: contentInput.value, img: posts[postNumber].img, userId: userData.userData.userId})
+                })
+                this.$router.push({name: 'Home'})
+            } else {
+                // user is not logged in
+                this.loggedIn = false;
+                console.log("loggedIn has been set to false");
+            }
+        }
+    },
+    mounted() {
+        // Checks if it is in use for creating a post or updating one
+        const isUpdating = localStorage.getItem("isUpdating");
+        console.log("LOGGED isUpdating -> ", isUpdating);
+        console.log("LOGGED TYPEOF isUpdating -> ", typeof(isUpdating));
+        console.log("LOGGED compar -> ", isUpdating == "true");
+        if (isUpdating == "true") {
+            console.log("updating Post");
+            this.updating = true;
+            const posts = JSON.parse(localStorage.getItem("postArray"));
+            const postNumber = JSON.parse(localStorage.getItem("postNumber"));
+            console.log("LOGGED post -> ", posts[postNumber]);
+            const titleInput = document.getElementsByClassName("inputBar")[0];
+            const typeInput = document.getElementsByClassName("inputBar")[1];
+            const contentInput = document.getElementsByClassName("inputBar")[2];
+            titleInput.value = posts[postNumber].title;
+            typeInput.value = posts[postNumber].type;
+            contentInput.innerHTML = posts[postNumber].content;
+        } else {
+            console.log("creating Post");
+        }
     }
 })
 </script>

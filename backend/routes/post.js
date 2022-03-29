@@ -18,7 +18,7 @@ router.post('/api/likedPost/:id', auth, postCtrl.likedPost);
  
 router.get('/api/posts', postCtrl.getAllPost);
 
-router.put('/api/posts/:id', auth, postCtrl.updatePost);
+router.put('/api/updatePost/:id', auth, postCtrl.updatePost);
 
 router.delete('/api/posts/:id', auth, postCtrl.deletePost);
 

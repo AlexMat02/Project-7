@@ -13,6 +13,8 @@ export default {
     }, methods: {
     },
     mounted() {
+        // this is for updatingPost
+        localStorage.removeItem("isUpdating");
         // fetch allUser
         fetch("http://localhost:4000/auth/users", {method: 'GET', 
             headers: {

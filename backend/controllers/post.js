@@ -100,14 +100,37 @@ exports.deletePost = (req, res) => {
 
 exports.updatePost = (req, res) => {
     const {title, type, content, img, userId} = req.body;
-    // #WORK need to test it
+    const postId = req.params.id
+    console.log("LOGGED postId -> ", postId);
     try {
-        connection.query("UPDATE post SET title = ? WHERE User_id_User = ?" , [title, type, content, img, userId], (err, results, fields) => {
+        connection.query("UPDATE post SET title = ? WHERE id_Post = ?" , [title, postId], (err, results, fields) => {
             if (err) {
                 console.log("An error has occured during updatePost request -> " , err);
                 return res.status(400).send()
             }
-            return res.status(200).json({ message : 'Post updated successfully'})
+            try {
+                connection.query("UPDATE post SET type = ? WHERE id_Post = ?" , [type, postId], (err, results, fields) => {
+                    if (err) {
+                        console.log("An error has occured during updatePost request -> " , err);
+                        return res.status(400).send()
+                    }
+                    try {
+                        connection.query("UPDATE post SET content = ? WHERE id_Post = ?" , [content, postId], (err, results, fields) => {
+                            if (err) {
+                                console.log("An error has occured during updatePost request -> " , err);
+                                return res.status(400).send()
+                            }
+                            res.status(200).json({ message : 'Post updated successfully'})
+                        })
+                    } catch {
+                        console.log("An error has occcured for updatePost request -> " , err);
+                        return res.status(500).send()
+                    }
+                })
+            } catch {
+                console.log("An error has occcured for updatePost request -> " , err);
+                return res.status(500).send()
+            }
         })
     } catch {
         console.log("An error has occcured for updatePost request -> " , err);

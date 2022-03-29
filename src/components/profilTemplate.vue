@@ -105,6 +105,8 @@ export default {
         },
     },
     mounted(){
+        // this is for updatingPost
+        localStorage.removeItem("isUpdating");
         // When the user clicks on his profil this is used 
         const profilId = localStorage.getItem("profilId");
         console.log("LOGGED profilId -> " , profilId);
