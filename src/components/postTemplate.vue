@@ -89,6 +89,10 @@ export default {
                                 if (goodPost.Liked === 1) {
                                     this.liked = true;
                                     console.log("this.liked set to true");
+                                } else if (goodPost.Liked === -1) {
+                                    console.log("User has disliked the post so he can't like it");
+                                    this.disliked = true;
+                                    return
                                 }
                             }
                         }
@@ -157,6 +161,10 @@ export default {
                                 if (goodPost.Liked === -1) {
                                     this.disliked = true;
                                     console.log("this.disliked set to true");
+                                } else if (goodPost.Liked === 1) {
+                                    console.log("User has liked the post so he can't dislike it");
+                                    this.liked = true;
+                                    return
                                 }
                             }
                         }
@@ -219,7 +227,7 @@ export default {
         const text = document.getElementById("postText");
         const author = document.getElementById("postAuthor");
         const imgHTML = document.getElementById("imgHTML");
-        // This part is here to display how many likes a post has
+        // This part is here to display how many likes/dislikes a post has
         fetch(`http://localhost:4000/api/howManyLikes/${posts[postNumber].id_Post}`, {method: 'GET', 
             headers: {
             'Accept': 'application/json',
