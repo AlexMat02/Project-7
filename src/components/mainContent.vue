@@ -124,17 +124,19 @@ export default {
                             'authorization': userData.userData.token}})
                     .then(response => response.json())
                     .then(res => localStorage.setItem("whichPostsSighted", JSON.stringify(res)))
-                    .then(console.log("PostsSighted table -> " , JSON.parse(localStorage.getItem("whichPostsSighted"))));
-                    let whichPostsSighted = JSON.parse(localStorage.getItem("whichPostsSighted"));
-                    // Change seen card background into a different color
-                    for (let x = 0; x < whichPostsSighted.length; x++) {
-                        for (let w = 0; w < posts.length; w++) {
-                            if (whichPostsSighted[x].Post_id_Post == posts[w].id_Post) {
-                                let card = document.getElementById("mD" + posts[w].id_Post)
-                                card.style.backgroundColor = "#E2B6C7";
+                    .then(console.log("PostsSighted table -> " , JSON.parse(localStorage.getItem("whichPostsSighted"))))
+                    .then ( () => {
+                        // Change seen card background into a different color
+                        let whichPostsSighted = JSON.parse(localStorage.getItem("whichPostsSighted"))
+                        for (let x = 0; x < whichPostsSighted.length; x++) {
+                            for (let w = 0; w < posts.length; w++) {
+                                if (whichPostsSighted[x].Post_id_Post == posts[w].id_Post) {
+                                    let card = document.getElementById("mD" + posts[w].id_Post)
+                                    card.style.backgroundColor = "#E2B6C7";
+                                }
                             }
                         }
-                    }           
+                    })    
                 } else {
                     // user is not logged in
                     this.loggedIn = false;

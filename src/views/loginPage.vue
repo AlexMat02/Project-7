@@ -48,10 +48,12 @@ export default({
             .then(res => dataHandler.userData = res)
             .then(res => localStorage.setItem("userData" , JSON.stringify(dataHandler))) // not returning anything
             .then(console.log( "logged localstorage -> " , JSON.parse(localStorage.getItem('userData'))))
+            .then ( () => {
+               this.$router.push({name: 'Home'})
+            })
             .catch( () => {
                 console.log("error")
             })
-            this.$router.push({name: 'Home'})
         }
     },
 })
