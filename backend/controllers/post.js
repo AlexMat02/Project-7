@@ -5,11 +5,9 @@ exports.createPost = (req, res) => {
     const postData = req.body;
     console.log("Logged postData in the correct way -> " , postData.post);
     const {title, type, content, img, userId} = postData.post;
-    console.log("LOGGED title " , title , "LOGGED type " , type , "LOGGED userId " , userId);
-    // There was a problem inside this request, it gave me CANNOT GET with the wrong url request
-    // The problem was a bad request (400)
+    console.log("LOGGED title " , title , "LOGGED type " , type , "LOGGED userId " , userId, "LOGGED img ", img);
     try {
-        connection.query("INSERT INTO post (title, type, content, img, User_id_User) VALUES (?, ?, ?, ?, ?)", [title, type, content, img, userId], (err, results, fields) => {
+        connection.query("INSERT INTO post (title, type, img, content,User_id_User) VALUES (?, ?, ?, ?, ?)", [title, type, img, content, userId], (err, results, fields) => {
             if (err) {
                 console.log("An error has occured during createPost request -> " , err);
                 return res.status(400).send()
@@ -29,7 +27,6 @@ exports.getAllPost = (req, res) => {
                 console.log("An error has occured during getAllPost request -> " , err);
                 return res.status(400).send()
             }
-            console.log("This is all the avaible posts : " , results)
             res.status(200).json(results);
         });
     } catch (err) {

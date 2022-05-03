@@ -13,7 +13,10 @@
                 <h2> Content </h2>
                 <textarea class="inputBar" id="textarea"></textarea>
                 <h2> Image URL </h2>
-                <input type="file" class="inputBar">
+                <form enctype="multipart/form-data" method="post">
+                    <input type="file" class="inputBar" @change="fileChange($event)">
+                    <img v-if="post.image" :src="post.image">
+                </form>
             </div>
             <button class="btn-classic" id="btn-post" @click="postCreator()" v-if="this.updating === false"> Submit Post </button>
             <button class="btn-classic" id="btn-post" @click="updatePost()" v-if="this.updating === true"> Update Post </button>
@@ -28,13 +31,29 @@ export default ({
     name: "postCreationPage",
     data() {
         return {
-            updating: false
+            updating: false,
+            post: {
+                image:''
+            },
         }
     },
     components: {
         header1,
     },
     methods: {
+        fileChange(e) {
+            console.log("LOGGED e -> ", e)
+            const file = e.target.files[0];
+            this.post.image = URL.createObjectURL(file);
+            this.post.file = e.target.files[0];
+            const imgInput = document.getElementsByClassName("inputBar")[3];
+            console.log("LOGGED imgInput -> ", imgInput);
+            console.log("LOGGED imgInput.value -> ", imgInput.value);
+            console.log("post.image here !")
+            console.log("LOGGED this.image -> ", this.post.image);
+            console.log("IF TRUE IS BLOB " ,this.post.image instanceof Blob)
+            // #WORK maybe this is the key ?
+        },
         postCreator() {
             const userData = JSON.parse(localStorage.getItem('userData'));
             console.log("LOGGED USERDATA .USERID -> " , userData.userData.userId)
@@ -50,16 +69,11 @@ export default ({
                 const contentInput = document.getElementsByClassName("inputBar")[2];
                 const imgInput = document.getElementsByClassName("inputBar")[3];
                 if ( titleInput.value != "" && typeInput.value != "" && contentInput.value != "") {
-                    console.log("postCreator is now working");
-                    console.log( "title -> " , titleInput.value )
-                    console.log( "type -> " , typeInput)
-                    console.log( "content -> " , contentInput.value )
-                    console.log( "img -> " , imgInput.value )
                     let postContent = {
                         title: titleInput.value,
                         type: typeInput,
                         content: contentInput.value,
-                        img: imgInput.value,
+                        img: this.post.image,
                         userId: userData.userData.userId,
                     }
                     console.log("LOGGED postContent -> " , postContent);

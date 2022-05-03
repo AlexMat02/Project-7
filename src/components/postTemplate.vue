@@ -34,6 +34,9 @@ export default {
             disliked: false,
             postLikes: 0,
             postDislikes: 0,
+            post: {
+                image: ''
+            },
         }
     },
     methods: {
@@ -71,50 +74,55 @@ export default {
                         'authorization': userData.userData.token}})
                 .then(response => response.json())
                 .then(res => localStorage.setItem("whichPostsLiked", JSON.stringify(res)))
-                .then(console.log("PostsLiked table -> " , JSON.parse(localStorage.getItem("whichPostsLiked"))));
-                let whichPostsLiked = JSON.parse(localStorage.getItem("whichPostsLiked"));
-                // Need to check if the user has already liked the post
-                if (whichPostsLiked.length == 0 || whichPostsLiked == null) {
-                    this.liked = false;
-                    console.log("this.liked set to false")
-                } else {
-                    for (let n = 0; n < whichPostsLiked.length; n++) {
-                        // This if statement checks if the post is inside the database
-                        if (whichPostsLiked[n].Post_id_Post == posts[postNumber].id_Post) {
-                            let goodPost = whichPostsLiked[n];
-                            if (goodPost.Liked === 1) {
-                                this.liked = true;
-                                console.log("this.liked set to true");
+                .then(console.log("PostsLiked table -> " , JSON.parse(localStorage.getItem("whichPostsLiked"))))
+                .then( () => {
+                    let whichPostsLiked = JSON.parse(localStorage.getItem("whichPostsLiked"));
+                    // Need to check if the user has already liked the post
+                    if (whichPostsLiked.length == 0 || whichPostsLiked == null) {
+                        this.liked = false;
+                        console.log("this.liked set to false")
+                    } else {
+                        for (let n = 0; n < whichPostsLiked.length; n++) {
+                            // This if statement checks if the post is inside the database
+                            if (whichPostsLiked[n].Post_id_Post == posts[postNumber].id_Post) {
+                                let goodPost = whichPostsLiked[n];
+                                if (goodPost.Liked === 1) {
+                                    this.liked = true;
+                                    console.log("this.liked set to true");
+                                }
                             }
                         }
                     }
-                }
-                console.log("LOGGED this.liked -> " , this.liked);
-                if (this.liked == true) {
-                    console.log("fetch request like 0 sent");
-                    fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
-                    headers: {
-                        'Accept' : 'application/json',
-                        'Content-Type': 'application/json',
-                        'authorization': userData.userData.token
-                    },
-                        body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
-                    })
-                    if (this.postLikes != 0) {
-                        this.postLikes -= 1;
-                    } 
-                } else {
-                    console.log("fetch request like 1 sent");
-                    fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
-                    headers: {
-                        'Accept' : 'application/json',
-                        'Content-Type': 'application/json',
-                        'authorization': userData.userData.token
-                    },
-                        body: JSON.stringify({like: 1, post: posts[postNumber], userId: userData.userData.userId})
-                    })
-                    this.postLikes += 1;
-                }
+                    console.log("LOGGED this.liked -> " , this.liked);
+                    if (this.liked == true) {
+                        console.log("fetch request like 0 sent");
+                        fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
+                        headers: {
+                            'Accept' : 'application/json',
+                            'Content-Type': 'application/json',
+                            'authorization': userData.userData.token
+                        },
+                            body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
+                        })
+                        this.liked = false;
+                        if (this.postLikes != 0) {
+                            this.postLikes -= 1;
+                        } 
+                    } else {
+                        console.log("fetch request like 1 sent");
+                        fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
+                        headers: {
+                            'Accept' : 'application/json',
+                            'Content-Type': 'application/json',
+                            'authorization': userData.userData.token
+                        },
+                            body: JSON.stringify({like: 1, post: posts[postNumber], userId: userData.userData.userId})
+                        })
+                        this.postLikes += 1;
+                        this.liked = true;
+                    }
+                })
+                
             } else {
                 console.log("not connected")
             }
@@ -134,50 +142,58 @@ export default {
                         'authorization': userData.userData.token}})
                 .then(response => response.json())
                 .then(res => localStorage.setItem("whichPostsLiked", JSON.stringify(res)))
-                .then(console.log("PostsLiked table -> " , JSON.parse(localStorage.getItem("whichPostsLiked"))));
-                let whichPostsLiked = JSON.parse(localStorage.getItem("whichPostsLiked"));
-                // Need to check if the user has already disliked the post
-                if (whichPostsLiked.length == 0 || whichPostsLiked == null) {
-                    this.disliked = false;
-                    console.log("this.disliked set to false")
-                } else {
-                    for (let n = 0; n < whichPostsLiked.length; n++) {
-                        // This if statement checks if the post is inside the database
-                        if (whichPostsLiked[n].Post_id_Post == posts[postNumber].id_Post) {
-                            let goodPost = whichPostsLiked[n];
-                            if (goodPost.Liked === -1) {
-                                this.disliked = true;
-                                console.log("this.disliked set to true");
+                .then(console.log("PostsLiked table -> " , JSON.parse(localStorage.getItem("whichPostsLiked"))))
+                .then( () => {
+                    let whichPostsLiked = JSON.parse(localStorage.getItem("whichPostsLiked"));
+                    // Need to check if the user has already disliked the post
+                    if (whichPostsLiked.length == 0 || whichPostsLiked == null) {
+                        this.disliked = false;
+                        console.log("this.disliked set to false")
+                    } else {
+                        for (let n = 0; n < whichPostsLiked.length; n++) {
+                            // This if statement checks if the post is inside the database
+                            if (whichPostsLiked[n].Post_id_Post == posts[postNumber].id_Post) {
+                                let goodPost = whichPostsLiked[n];
+                                if (goodPost.Liked === -1) {
+                                    this.disliked = true;
+                                    console.log("this.disliked set to true");
+                                }
                             }
                         }
                     }
-                }
-                console.log("LOGGED this.disliked -> " , this.disliked);
-                if (this.disliked == true) {
-                    console.log("fetch request like 0 sent");
-                    fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
-                    headers: {
-                        'Accept' : 'application/json',
-                        'Content-Type': 'application/json',
-                        'authorization': userData.userData.token
-                    },
-                        body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
-                    })
-                    if (this.disliked != 0) {
-                        this.disliked -= 1;
-                    } 
-                } else {
-                    console.log("fetch request like 1 sent");
-                    fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
-                    headers: {
-                        'Accept' : 'application/json',
-                        'Content-Type': 'application/json',
-                        'authorization': userData.userData.token
-                    },
-                        body: JSON.stringify({like: -1, post: posts[postNumber], userId: userData.userData.userId})
-                    })
-                    this.disliked += 1;
-                }
+                    console.log("LOGGED this.disliked -> " , this.disliked);
+                    if (this.disliked == true) {
+                        console.log("fetch request like 0 sent");
+                        fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
+                        headers: {
+                            'Accept' : 'application/json',
+                            'Content-Type': 'application/json',
+                            'authorization': userData.userData.token
+                        },
+                            body: JSON.stringify({like: 0, post: posts[postNumber], userId: userData.userData.userId})
+                        })
+                        this.disliked = false;
+                        if (this.postDislikes != 0) {
+                            this.postDislikes -= 1;
+                        } 
+                    } else {
+                        console.log("fetch request like -1 sent");
+                        fetch(`http://localhost:4000/api/likedPost/${posts[postNumber]._id}`, {method: 'POST',
+                        headers: {
+                            'Accept' : 'application/json',
+                            'Content-Type': 'application/json',
+                            'authorization': userData.userData.token
+                        },
+                            body: JSON.stringify({like: -1, post: posts[postNumber], userId: userData.userData.userId})
+                        })
+                        .then( () => {
+                            this.postDislikes += 1;
+                            this.disliked = true;
+                            console.log("seen1-1-1-1")
+                        })
+                    }
+                })
+                
             } else {
                 console.log("not connected")
             }
@@ -210,21 +226,26 @@ export default {
             'Content-Type': 'application/json'}})
         .then(response => response.json())
         .then(res => localStorage.setItem("howManyLikes", JSON.stringify(res)))
-        .then(console.log(JSON.parse(localStorage.getItem("howManyLikes"))));
-        let howManyLikes = JSON.parse(localStorage.getItem("howManyLikes"));
-        console.log("howManyLikes -> ", howManyLikes);
-        for (let WW = 0; WW < howManyLikes.length; WW++) {
-            if (howManyLikes[WW].Liked === 1) {
-                this.postLikes += 1;
+        .then(console.log(JSON.parse(localStorage.getItem("howManyLikes"))))
+        .then( () => {
+            let howManyLikes = JSON.parse(localStorage.getItem("howManyLikes"))
+            console.log("howManyLikes -> ", howManyLikes);
+            for (let WW = 0; WW < howManyLikes.length; WW++) {
+                if (howManyLikes[WW].Liked === 1) {
+                    this.postLikes += 1;
+                }
+                if (howManyLikes[WW].Liked === -1) {
+                    this.postDislikes += 1;
+                }
             }
-            if (howManyLikes[WW].Liked === -1) {
-                this.postDislikes += 1;
-            }
-        }
+        })
         // display correct data of the post
         title.innerHTML = posts[postNumber].title;
         type.innerHTML = posts[postNumber].type;
         text.innerHTML = posts[postNumber].content;
+        console.log("LOGGED posts[postNumber].img -> ", posts[postNumber].img);
+        console.log("IF TRUE IS BLOB " ,posts[postNumber].img instanceof Blob)
+        imgHTML.src = posts[postNumber].img;
         // get the post's author
         const allUsersArray = JSON.parse(localStorage.getItem("allUserArray"))
         console.log("allUsersArray -> ", allUsersArray);
@@ -237,9 +258,9 @@ export default {
         author.innerHTML = authorName;
         if (posts[postNumber].img == undefined || posts[postNumber].img == null) {
             console.log("no img avaible for this post")
-        } else {
+        }/*  else {
             imgHTML.src = posts[postNumber].img;
-        }
+        } */
         // getting userData and checking if user's logged in
         const userData = JSON.parse(localStorage.getItem('userData'));
         this.$store.dispatch('expChecker' , {userData})
