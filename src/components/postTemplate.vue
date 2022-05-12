@@ -9,6 +9,7 @@
             <p id="postText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor iusto, harum expedita dolorum quo repellat vel labore magni, magnam ipsa, ducimus inventore est. Perferendis assumenda nam ex recusandae natus maiores.
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur debitis qui, totam earum, dolore impedit atque exercitationem quidem eveniet facilis ipsam, doloribus sequi accusamus cum consequuntur tenetur nesciunt at. Consequatur.
             </p>
+            <img id="imgHTML" :src="this.post.image">
             <div class="divContent__btn">
                 <div class="divContent__btnstack">
                     <h3> {{ postLikes }} </h3>
@@ -19,7 +20,6 @@
                     <button class="btn__like btn__like-update" v-if="loggedIn == true" @click="updateRequest()"><h3> Update</h3></button>
                 </div>
             </div>
-            <img id="imgHTML">
         </div>
     </div>
 </template>
@@ -52,7 +52,8 @@ export default {
                 'Accept' : 'application/json',
                 'Content-Type': 'application/json',
                 'authorization': userData.userData.token
-            }})
+            },
+            body: JSON.stringify(posts[postNumber])})
             this.$router.push({name: 'Home'})
         },
         updateRequest() {
@@ -253,7 +254,8 @@ export default {
         text.innerHTML = posts[postNumber].content;
         console.log("LOGGED posts[postNumber].img -> ", posts[postNumber].img);
         console.log("IF TRUE IS BLOB " ,posts[postNumber].img instanceof Blob)
-        imgHTML.src = posts[postNumber].img;
+        /* imgHTML.src = posts[postNumber].img; */
+        this.post.image = posts[postNumber].img;
         // get the post's author
         const allUsersArray = JSON.parse(localStorage.getItem("allUserArray"))
         console.log("allUsersArray -> ", allUsersArray);
@@ -337,6 +339,12 @@ export default {
 </script>
 
 <style>
+#imgHTML {
+    width: 40vw;
+    height: inherit;
+    border: 2px solid black;
+    border-radius: 4%;
+}
 .divContent__btn{
     display: flex;
     flex-direction: row;

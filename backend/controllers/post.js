@@ -1,13 +1,30 @@
 var db = require('../dbConnections');
 var connection = db();
+const multer = require('multer');
+const fs = require("fs");
 
 exports.createPost = (req, res) => {
+    console.log("createPost seen")
+    console.log("LOGGED req.file -> ", req.file);
+    console.log("LOGGED req.body.file -> ", req.body.file);
+    console.log("LOGGED req.body -> ", req.body);
+    console.log("LOGGED req.protocol -> ", req.protocol);
     const postData = req.body;
+    const url = req.protocol + '://' + req.get('host');
+    console.log("LOGGED url -> ", url);
+    const v = url + '/images/' + req.file.filename;
+    console.log("v -> ", v);
+    console.log("req.file -> ", req.file);
     console.log("Logged postData in the correct way -> " , postData.post);
-    const {title, type, content, img, userId} = postData.post;
+    console.log("Logged postData in the correct way -> " , postData);
+    const title = postData.title; 
+    const type = postData.type; 
+    const content = postData.content; 
+    const img = postData.img;  
+    const userId = postData.userId; 
     console.log("LOGGED title " , title , "LOGGED type " , type , "LOGGED userId " , userId, "LOGGED img ", img);
     try {
-        connection.query("INSERT INTO post (title, type, img, content,User_id_User) VALUES (?, ?, ?, ?, ?)", [title, type, img, content, userId], (err, results, fields) => {
+        connection.query("INSERT INTO post (title, type, img, content,User_id_User) VALUES (?, ?, ?, ?, ?)", [title, type, v, content, userId], (err, results, fields) => {
             if (err) {
                 console.log("An error has occured during createPost request -> " , err);
                 return res.status(400).send()
@@ -52,7 +69,17 @@ exports.getOnePost = (req, res) => {
 };
 
 exports.deletePost = (req, res) => {
+    console.log("LOGGED req.body -> ", req.body);
     const postID = req.params.id;
+    const postData = req.body;
+    const filename = postData.img.split("/images/")[1];
+    fs.unlink("images/" + filename ,(err) => {
+        if (err) {
+            console.log("err -> ", err)
+        } else {
+            console.log("img deleted")
+        }
+    })
     // this is to delete the Foreign Key inside Liked
     try {
         connection.query("DELETE FROM Liked WHERE Post_id_Post = ?", [postID], (err, results, fields) => {
@@ -96,7 +123,11 @@ exports.deletePost = (req, res) => {
 };
 
 exports.updatePost = (req, res) => {
-    const {title, type, content, img, userId} = req.body;
+    console.log("LOGGED req.file -> ", req.file);
+    postData = req.body;
+    const title = postData.title; 
+    const type = postData.type; 
+    const content = postData.content;   
     const postId = req.params.id
     console.log("LOGGED postId -> ", postId);
     try {
@@ -117,7 +148,24 @@ exports.updatePost = (req, res) => {
                                 console.log("An error has occured during updatePost request -> " , err);
                                 return res.status(400).send()
                             }
-                            res.status(200).json({ message : 'Post updated successfully'})
+                            try {
+                                if (req.file) {
+                                    const url = req.protocol + '://' + req.get('host');
+                                    const changedIMG = url + '/images/' + req.file.filename;
+                                    connection.query("UPDATE post SET img = ? WHERE id_Post = ?", [changedIMG, postId], (err, results, fields) => {
+                                        if (err) {
+                                            console.log("An error has occured during updatePost request -> ", err);
+                                            return res.status(400).send()
+                                        }
+                                        res.status(200).json({ message : 'Post updated successfully'})  
+                                    })
+                                } else {
+                                    res.status(200).json({ message : 'Post updated successfully'})  
+                                }
+                            } catch {
+                                console.log("An error has occured for updatePost request -> ", err);
+                                return res.status(500).send()
+                            }
                         })
                     } catch {
                         console.log("An error has occcured for updatePost request -> " , err);

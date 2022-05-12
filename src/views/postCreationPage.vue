@@ -33,7 +33,8 @@ export default ({
         return {
             updating: false,
             post: {
-                image:''
+                image:'',
+                file: null
             },
         }
     },
@@ -49,9 +50,13 @@ export default ({
             const imgInput = document.getElementsByClassName("inputBar")[3];
             console.log("LOGGED imgInput -> ", imgInput);
             console.log("LOGGED imgInput.value -> ", imgInput.value);
-            console.log("post.image here !")
+            console.log("post.image here !");
             console.log("LOGGED this.image -> ", this.post.image);
-            console.log("IF TRUE IS BLOB " ,this.post.image instanceof Blob)
+            console.log("LOGGEd imgInput.files[0] -> ", imgInput.files[0]);
+            console.log("IF TRUE IS BLOB " ,this.post.image instanceof Blob);
+            let data = new FormData()
+            data.append('file', imgInput.files[0])
+            console.log("LOGGED data -> ", data);
             // #WORK maybe this is the key ?
         },
         postCreator() {
@@ -74,16 +79,31 @@ export default ({
                         type: typeInput,
                         content: contentInput.value,
                         img: this.post.image,
+                        imgURL: imgInput.files[0].name,
                         userId: userData.userData.userId,
                     }
+                    let fd = new FormData()
+                    fd.append('file', this.post.file, this.post.file.name);
+                    fd.append('post', JSON.stringify(postContent));
+                    fd.append('title', postContent.title); 
+                    fd.append('type', postContent.type); 
+                    fd.append('content', postContent.content); 
+                    fd.append('img', postContent.img); 
+                    fd.append('imgURL', postContent.imgURL); 
+                    fd.append('userId', postContent.userId); 
+                    fd.append('user', userData.userData.userId);
+                    console.log("LOGGED this.post.file -> ", this.post.file)
+                    for (var pair of fd.entries()) {
+                        console.log("LOGGED fd -> " , pair[0]+ ', ' + pair[1]); 
+                    }
+                    console.log("LOGGED fd 2 -> " , Object.fromEntries(fd))
                     console.log("LOGGED postContent -> " , postContent);
                     const myHeaders = new Headers();
-                    myHeaders.append('Content-Type', 'application/json');
-                    myHeaders.append('Accept', 'application/json');
+                    myHeaders.append('Accept', 'multipart/form-data');
                     myHeaders.append('Authorization', userData.userData.token);
                     fetch("http://localhost:4000/api/posting", {method: 'POST', 
                         headers: myHeaders,
-                        body: JSON.stringify({post: postContent}, userData.userData.userId)})
+                        body: fd}) 
                     .then(console.log("fetch request send"))
                     this.$router.push({name: 'Home'})
                 } else if (titleInput.value == ""){
@@ -114,18 +134,27 @@ export default ({
             const typeInput = document.getElementsByClassName("inputBar")[1].value;
             console.log("typeINput.value -> " , typeInput);
             const contentInput = document.getElementsByClassName("inputBar")[2];
-            const imgInput = document.getElementsByClassName("inputBar")[3];
+            let fd = new FormData();
+            if (this.post.file) {
+                fd.append('file', this.post.file, this.post.file.name); 
+            }
+            fd.append('title', titleInput.value); 
+            fd.append('type', typeInput); 
+            fd.append('content', contentInput.value); 
+            fd.append('userId', userData.userData.userId);  
+            for (var pair of fd.entries()) {
+                console.log("LOGGED fd -> " , pair[0]+ ', ' + pair[1]); 
+            }
+            console.log("LOGGED fd 2 -> " , Object.fromEntries(fd))
             if (expCheck == "true") {
                 // user is logged in
                 this.loggedIn = true;
                 console.log("loggedIn has been set to true");
                 fetch(`http://localhost:4000/api/updatePost/${posts[postNumber].id_Post}`, {method: 'PUT',
                     headers: {
-                        'Accept' : 'application/json',
-                        'Content-Type': 'application/json',
                         'authorization': userData.userData.token
                     },
-                    body: JSON.stringify({title: titleInput.value, type: typeInput, content: contentInput.value, img: posts[postNumber].img, userId: userData.userData.userId})
+                    body: fd, userId: userData.userData.userId
                 })
                 this.$router.push({name: 'Home'})
             } else {

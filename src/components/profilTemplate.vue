@@ -2,7 +2,6 @@
     <div class="profil">
         <div class="profilContainer">
             <div class="profilContainer__header">
-                <img class="profilContainer__img" src="../assets/logo.png">
                 <h2 id="profilUsername">Profil Name</h2>
             </div>
             <div class="profilContainer__description">
