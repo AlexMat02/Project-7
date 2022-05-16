@@ -57,7 +57,6 @@ export default ({
             let data = new FormData()
             data.append('file', imgInput.files[0])
             console.log("LOGGED data -> ", data);
-            // #WORK maybe this is the key ?
         },
         postCreator() {
             const userData = JSON.parse(localStorage.getItem('userData'));
