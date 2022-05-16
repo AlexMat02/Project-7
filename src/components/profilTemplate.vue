@@ -115,12 +115,15 @@ export default {
             'Accept': 'application/json',
             'Content-Type': 'application/json'}})
         .then(response => response.json())
-        .then(res => localStorage.setItem("userArray", JSON.stringify(res)))
-        .then(console.log("LOGGED array of all users -> " , JSON.parse(localStorage.getItem("userArray"))));
+        .then( (res) => {
+            console.log("seen");
+            localStorage.setItem("userArray", JSON.stringify(res)) // #WORK could be stringify ?
+            console.log("LOGGEd array of all users -> ", JSON.parse(localStorage.getItem("userArray")))
+        });
         // Get correct Data for later use
         const userArray = JSON.parse(localStorage.getItem("userArray"));
         const correctProfil = localStorage.getItem("profilNumber");
-        console.log("LOGGED correctProfil -> " , correctProfil);
+        console.log("LOGGED correctProfil -> ", correctProfil);
         // Find the correct index of the user inside userArray
         let profilIndex;
         for (let n = 0; n < userArray.length; n++) {

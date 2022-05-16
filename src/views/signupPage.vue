@@ -47,6 +47,7 @@ export default({
         createAccount(){
             console.log("createAccount function has been read")
             this.$store.dispatch("createAccount", {email: this.email, password: this.password, username: this.username})
+            this.$router.push({name: 'Home'})
         }
     },
     components: {

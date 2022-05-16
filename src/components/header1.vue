@@ -25,7 +25,7 @@ export default {
     setProfil() {
         console.log("setProfil has been called");
         const userData = JSON.parse(localStorage.getItem('userData'));
-        localStorage.setItem("profilId", userData.userData.userId);
+        localStorage.setItem("profilNumber", userData.userData.userId);
     },
 }, mounted() {
     // check if user is logged in
