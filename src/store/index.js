@@ -23,6 +23,7 @@ export default createStore({
       const todayDate = new Date().getTime();
       if (userData.userData === null) {
         console.log("userData is null")
+        localStorage.setItem("expChecking" , "false");
         return false
       } else {
         console.log("LOGGED userData" , userData);
