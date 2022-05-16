@@ -16,8 +16,8 @@
                     <button class="btn__like btn__like-green" @click="LikeRequest()"><h3> Like </h3></button>
                     <h3> {{ postDislikes }} </h3>
                     <button class="btn__like btn__like-red" @click="DislikeRequest()"><h3> Dislike </h3></button>
-                    <button class="btn__like btn__like-delete" v-if="loggedIn == true" @click="deleteRequest()"><h3> Delete</h3></button>
-                    <button class="btn__like btn__like-update" v-if="loggedIn == true" @click="updateRequest()"><h3> Update</h3></button>
+                    <button class="btn__like btn__like-delete" v-if="creatorLoggedIn == true" @click="deleteRequest()"><h3> Delete</h3></button>
+                    <button class="btn__like btn__like-update" v-if="creatorLoggedIn == true" @click="updateRequest()"><h3> Update</h3></button>
                 </div>
             </div>
         </div>
@@ -30,6 +30,7 @@ export default {
     data() {
         return {
             loggedIn: false,
+            creatorLoggedIn: false,
             liked: false,
             disliked: false,
             postLikes: 0,
@@ -268,25 +269,18 @@ export default {
         author.innerHTML = authorName;
         if (posts[postNumber].img == undefined || posts[postNumber].img == null) {
             console.log("no img avaible for this post")
-        }/*  else {
-            imgHTML.src = posts[postNumber].img;
-        } */
+        }
         // getting userData and checking if user's logged in
         const userData = JSON.parse(localStorage.getItem('userData'));
         this.$store.dispatch('expChecker' , {userData})
         const expCheck = localStorage.getItem('expChecking');
         console.log("expChecking -> " , expCheck)
         console.log("LOGGED userData -> " , userData);
-        console.log("LOGGED posts -> " , posts[postNumber]);
-        if (userData != null && posts[postNumber].User_id_User == userData.userData.userId) {
-            console.log("user has created this")
-            if (expCheck == "true") {
-                // user is logged in
-                this.loggedIn = true;
-                console.log("loggedIn set to true");
-                // This part is for unread posts
-                // fetch the table of all of the post sighted
-                fetch(`http://localhost:4000/auth/whichPostsSighted/${userData.userData.userId}`, {method: 'GET',
+        if (expCheck == "true") {
+            this.loggedIn = true
+            // This part is for unread posts
+            // fetch the table of all of the post sighted
+            fetch(`http://localhost:4000/auth/whichPostsSighted/${userData.userData.userId}`, {method: 'GET',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -326,6 +320,15 @@ export default {
                         })
                     }
                 }
+        }
+        console.log("LOGGED posts -> " , posts[postNumber]);
+        if (userData != null && posts[postNumber].User_id_User == userData.userData.userId) {
+            console.log("user has created this")
+            if (expCheck == "true") {
+                // user is logged in
+                this.loggedIn = true;
+                this.creatorLoggedIn = true;
+                console.log("loggedIn set to true");
             } else {
                 // user is not logged in
                 this.loggedIn = false;

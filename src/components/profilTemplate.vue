@@ -35,7 +35,10 @@ export default {
                 'Content-Type': 'application/json',
                 'authorization': userData.userData.token
             }})
-            this.$router.push({name: 'Home'})
+            .then( () => {
+                localStorage.removeItem("userData");
+                this.$router.push({name: 'Home'})
+            })
         },
         editingSwitch(){
             const inputEdit = document.getElementById("input");
@@ -104,6 +107,7 @@ export default {
         },
     },
     mounted(){
+        console.log("logged this.loggedIN -> ", this.loggedIn);
         // this is for updatingPost
         localStorage.removeItem("isUpdating");
         // When the user clicks on his profil this is used 
@@ -119,52 +123,53 @@ export default {
             console.log("seen");
             localStorage.setItem("userArray", JSON.stringify(res)) // #WORK could be stringify ?
             console.log("LOGGEd array of all users -> ", JSON.parse(localStorage.getItem("userArray")))
+            // Get correct Data for later use
+            const userArray = JSON.parse(localStorage.getItem("userArray"));
+            const correctProfil = localStorage.getItem("profilNumber");
+            console.log("LOGGED correctProfil -> ", correctProfil);
+            // Find the correct index of the user inside userArray
+            let profilIndex;
+            for (let n = 0; n < userArray.length; n++) {
+                if (userArray[n].id_User == correctProfil) {
+                    profilIndex = n;
+                    console.log("LOGGED profilIndex -> " , profilIndex);
+                } else {
+                    console.log("not this one")
+                    console.log("LOGGED WHILE profilIndex -> " , profilIndex);
+                }
+            }
+            console.log("LOGGED userArray[profilIndex] -> " , userArray[profilIndex])
+            // display the correct profil name
+            const profilName = document.getElementById("profilUsername");
+            profilName.innerHTML = userArray[profilIndex].username;
+            // If the user's description is empty, remplace it with "This is where you talk about yourself"
+            if (userArray[profilIndex].description == "" || userArray[profilIndex].description == undefined) {
+                this.editingText = "This is where you talk about yourself"
+            } else {
+                this.editingText = userArray[profilIndex].description;
+            }
+            // Check if the user is loggedIn
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            this.$store.dispatch('expChecker' , {userData})
+            const expCheck = localStorage.getItem('expChecking');
+            console.log("expChecking -> " , expCheck)
+            console.log("LOGGED userData -> " , userData);
+            if (userData != null) {
+                console.log("user has created this")
+                if (expCheck == "true") {
+                    // user is logged in
+                    this.loggedIn = true;
+                    console.log("loggedIn set to true");
+                } else {
+                    // user is not logged in
+                    this.loggedIn = false;
+                    console.log("loggedIn set to false");
+                }
+            } else {
+                console.log("not the right user or not connected")
+            }
         });
-        // Get correct Data for later use
-        const userArray = JSON.parse(localStorage.getItem("userArray"));
-        const correctProfil = localStorage.getItem("profilNumber");
-        console.log("LOGGED correctProfil -> ", correctProfil);
-        // Find the correct index of the user inside userArray
-        let profilIndex;
-        for (let n = 0; n < userArray.length; n++) {
-            if (userArray[n].id_User == correctProfil) {
-                profilIndex = n;
-                console.log("LOGGED profilIndex -> " , profilIndex);
-            } else {
-                console.log("not this one")
-                console.log("LOGGED WHILE profilIndex -> " , profilIndex);
-            }
-        }
-        console.log("LOGGED userArray[profilIndex] -> " , userArray[profilIndex])
-        // display the correct profil name
-        const profilName = document.getElementById("profilUsername");
-        profilName.innerHTML = userArray[profilIndex].username;
-        // If the user's description is empty, remplace it with "This is where you talk about yourself"
-        if (userArray[profilIndex].description == "" || userArray[profilIndex].description == undefined) {
-            this.editingText = "This is where you talk about yourself"
-        } else {
-            this.editingText = userArray[profilIndex].description;
-        }
-        // Check if the user is loggedIn
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        this.$store.dispatch('expChecker' , {userData})
-        const expCheck = localStorage.getItem('expChecking');
-        console.log("expChecking -> " , expCheck)
-        console.log("LOGGED userData -> " , userData);
-        if (userData != null) {
-            console.log("user has created this")
-            if (expCheck == "true") {
-                // user is logged in
-                this.loggedIn = true;
-                console.log("loggedIn set to true");
-            } else {
-                // user is not logged in
-                this.loggedIn = false;
-                console.log("loggedIn set to false");
-            }
-        } else {
-            console.log("not the right user or not connected")
-        }
+        
     }
 }
 </script>
