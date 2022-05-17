@@ -270,6 +270,10 @@ export default {
         if (posts[postNumber].img == undefined || posts[postNumber].img == null) {
             console.log("no img avaible for this post")
         }
+        let currentProfil = document.getElementById("postAuthor");
+        currentProfil.addEventListener("click", () => {
+            localStorage.setItem("profilNumber", posts[postNumber].User_id_User);
+        })
         // getting userData and checking if user's logged in
         const userData = JSON.parse(localStorage.getItem('userData'));
         this.$store.dispatch('expChecker' , {userData})

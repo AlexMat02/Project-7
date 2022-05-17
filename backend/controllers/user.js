@@ -33,7 +33,7 @@ exports.login = (req, res, next) => {
                 console.log("An error has occured during login request -> ", err);
                 return res.status(400).send()
             }
-            console.log("results test -> " , results[0].id_User); // THIS WORKS, I DONT UNDERSTAND ?????
+            console.log("results test -> " , results[0].id_User);
             bcrypt.compare(pw, results[0].password).then(
                 (valid) => {
                     if (!valid) {
