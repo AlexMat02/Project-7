@@ -31,6 +31,11 @@ const routes = [
     path: '/postCreationPage',
     name: 'postCreationPage',
     component: () => import(/* webpackChunkName: "about" */ '../views/postCreationPage.vue')
+  },
+  {
+    path: '/bufferPage',
+    name: 'bufferPage',
+    component: () => import(/* webpackChunkName: "about" */ '../views/bufferPage.vue')
   }
 ]
 

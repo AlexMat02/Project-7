@@ -7,6 +7,7 @@
             <div>
                 <router-link to="/login"><button class="header__button" id="login"> Login </button></router-link>
                 <router-link to="/signup"><button class="header__button" id="signup"> Sign Up </button></router-link>
+                <button class="header__button" id="logout" @click="LoggingOut()" v-if="loggedIn == true"> Logout </button>
                 <router-link to="/profilExample"><button class="header__button" id="profil" @click="setProfil()" v-if="loggedIn == true"> Profil </button></router-link>
             </div>
         </header>
@@ -27,6 +28,13 @@ export default {
         const userData = JSON.parse(localStorage.getItem('userData'));
         localStorage.setItem("profilNumber", userData.userData.userId);
     },
+    LoggingOut() {
+        console.log("LoggingOut - 1");
+        localStorage.removeItem("userData");
+        console.log("LoggingOut - 2");
+        this.$router.push({name: 'bufferPage'});
+        console.log("LoggingOut - 3");
+    } 
 }, mounted() {
     // check if user is logged in
     const userData = JSON.parse(localStorage.getItem('userData'));
@@ -87,8 +95,8 @@ header {
 }
 #header1__header {
     margin-left: 5px;
-    object-fit: unset;
-    width: 8rem;
+    object-fit: cover;
+    width: 12rem;
     height: 8rem;
 }
 #searchBar {
