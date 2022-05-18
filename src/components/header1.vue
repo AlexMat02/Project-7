@@ -5,8 +5,8 @@
                 <router-link to="/"><img src="../assets/icon-left-font-monochrome-black.png" id="header1__header"></router-link>
             </div>
             <div>
-                <router-link to="/login"><button class="header__button" id="login"> Login </button></router-link>
-                <router-link to="/signup"><button class="header__button" id="signup"> Sign Up </button></router-link>
+                <router-link to="/login"><button class="header__button" id="login" v-if="loggedIn == false"> Login </button></router-link>
+                <router-link to="/signup"><button class="header__button" id="signup" v-if="loggedIn == false"> Sign Up </button></router-link>
                 <button class="header__button" id="logout" @click="LoggingOut()" v-if="loggedIn == true"> Logout </button>
                 <router-link to="/profilExample"><button class="header__button" id="profil" @click="setProfil()" v-if="loggedIn == true"> Profil </button></router-link>
             </div>
