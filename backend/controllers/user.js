@@ -33,7 +33,12 @@ exports.login = (req, res, next) => {
                 console.log("An error has occured during login request -> ", err);
                 return res.status(400).send()
             }
-            console.log("results test -> " , results[0].id_User);
+            console.log("LOGGED results -> ", results);
+            if (results.length < 1) {
+                return res.status(400).json({
+                    message: "No user found with those logs"
+                })
+            }
             bcrypt.compare(pw, results[0].password).then(
                 (valid) => {
                     if (!valid) {

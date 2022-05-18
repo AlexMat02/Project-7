@@ -7,14 +7,16 @@
                 <div>
                     <div>
                         <h2> Username </h2>
-                        <input class="inputBar">
+                        <input id="username" class="inputBar">
                     </div>
                     <div>
                         <h2> Password </h2>
-                        <input type="password" class="inputBar">
+                        <input id="password" type="password" class="inputBar">
                     </div>
                 </div>
                 <button class="btn-classic" @click="login()"> <h3>LOGIN</h3> </button>
+                <div id="errDiv">
+                </div>
             </div>
         </div>
     </div>
@@ -46,13 +48,30 @@ export default({
             body: JSON.stringify(userInfos)})
             .then(response => response.json())
             .then(res => dataHandler.userData = res)
+            .then( () => {
+                console.log("LOGGEd data -> ", dataHandler.userData);
+                if (dataHandler.userData.message) {
+                    console.log("wrong logs")
+                    const usernameInput = document.getElementById("username");
+                    const passwordInput = document.getElementById("password");
+                    const errDiv = document.getElementById("errDiv");
+                    let errMsg = document.createElement("h2");
+                    errMsg.innerHTML = "Wrong Username or Password"
+                    errMsg.style.color = "red";
+                    usernameInput.style.borderColor = "red";
+                    passwordInput.style.borderColor = "red";
+                    errDiv.appendChild(errMsg);
+                    throw 'cancel'
+                }
+            })
             .then(res => localStorage.setItem("userData" , JSON.stringify(dataHandler))) // not returning anything
             .then(console.log( "logged localstorage -> " , JSON.parse(localStorage.getItem('userData'))))
             .then ( () => {
-               this.$router.push({name: 'Home'})
+                this.$router.push({name: 'Home'})
             })
             .catch( () => {
                 console.log("error")
+                console.log("YEET");
             })
         }
     },
