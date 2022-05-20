@@ -35,7 +35,7 @@ exports.login = (req, res, next) => {
             }
             console.log("LOGGED results -> ", results);
             if (results.length < 1) {
-                return res.status(400).json({
+                return res.status(500).json({
                     message: "No user found with those logs"
                 })
             }

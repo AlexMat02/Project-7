@@ -36,6 +36,11 @@ const routes = [
     path: '/bufferPage',
     name: 'bufferPage',
     component: () => import(/* webpackChunkName: "about" */ '../views/bufferPage.vue')
+  },
+  {
+    path: '/signupBuffer',
+    name: 'signupBuffer',
+    component: () => import(/* webpackChunkName: "about" */ '../views/signupBuffer.vue')
   }
 ]
 

@@ -11,7 +11,13 @@ export default createStore({
   actions: {
     createAccount: ({commit}, userInfos) => {
       console.log("request has been sent");
+      const {username, password} = userInfos
       console.log(userInfos);
+      const userLogs = {
+        username: username,
+        password: password
+      }
+      localStorage.setItem("signupLogs", JSON.stringify(userLogs))
       fetch("http://localhost:4000/auth/signup", {method: 'POST', 
       headers: {
       'Accept': 'application/json',
