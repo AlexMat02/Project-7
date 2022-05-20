@@ -22,7 +22,6 @@ export default {
             'Content-Type': 'application/json'}})
         .then(response => response.json())
         .then(res => localStorage.setItem("allUserArray", JSON.stringify(res)))
-        .then(console.log("AllUsers Array -> " , JSON.parse(localStorage.getItem("allUserArray"))))
         // fetch Allposts
         fetch("http://localhost:4000/api/posts", {method: 'GET', 
             headers: {
@@ -30,12 +29,10 @@ export default {
             'Content-Type': 'application/json'}})
         .then(response => response.json())
         .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
-        .then(console.log(" localstorage item ->  " , JSON.parse(localStorage.getItem('postArray'))))
         .then( () => {
             let posts = JSON.parse(localStorage.getItem('postArray'));
             if (posts.length == 0) {
                 // If they are not posts, give something else to look at instead of a blank page
-                console.log("No posts avaible");
                 const baseDiv = document.getElementsByClassName("mainContent__container")[0];
                 let noPostMsg = document.createElement("h2");
                 noPostMsg.innerHTML = "No posts have been found...."
@@ -62,7 +59,6 @@ export default {
                     headerLogo.className = "divContent__author";
                     // Find post author
                     const allUsersArray = JSON.parse(localStorage.getItem("allUserArray"))
-                    console.log("allUsersArray -> ", allUsersArray);
                     let authorName = ""
                     for (let f = 0; f < allUsersArray.length; f++) {
                         if (allUsersArray[f].id_User == posts[n].User_id_User) {
@@ -94,7 +90,6 @@ export default {
                     currentPost.addEventListener("click", () => {
                         let postChosen = JSON.stringify(n);
                         localStorage.setItem("postNumber" , postChosen);
-                        console.log("LOGGED postNumber -> " , JSON.parse(localStorage.getItem("postNumber")));
                     })
                     // Same thing for profil
                     let currentProfil = document.getElementById("logo" + n);
@@ -108,13 +103,10 @@ export default {
                 this.$store.dispatch('expChecker' , {userData});
                 // check if user is logged in
                 const expCheck = localStorage.getItem('expChecking');
-                console.log("expChecking -> " , expCheck)
-                console.log("LOGGED userData -> " , userData);
                 if (userData != null) {
                     if (expCheck == "true") {
                         // user is logged in
                         this.loggedIn = true;
-                        console.log("loggedIn set to true");
                         // if not IGNORE
                         // if user is logged in then
                         // fetches which post the logged user saw
@@ -125,7 +117,6 @@ export default {
                                 'authorization': userData.userData.token}})
                         .then(response => response.json())
                         .then(res => localStorage.setItem("whichPostsSighted", JSON.stringify(res)))
-                        .then(console.log("PostsSighted table -> " , JSON.parse(localStorage.getItem("whichPostsSighted"))))
                         .then ( () => {
                             // Change seen card background into a different color
                             let whichPostsSighted = JSON.parse(localStorage.getItem("whichPostsSighted"))
@@ -141,10 +132,7 @@ export default {
                     } else {
                         // user is not logged in
                         this.loggedIn = false;
-                        console.log("loggedIn set to false");
                     }
-                } else {
-                    console.log("not the right user or not connected")
                 }
             }
         })

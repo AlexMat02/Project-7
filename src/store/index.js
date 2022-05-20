@@ -10,9 +10,7 @@ export default createStore({
   },
   actions: {
     createAccount: ({commit}, userInfos) => {
-      console.log("request has been sent");
       const {username, password} = userInfos
-      console.log(userInfos);
       const userLogs = {
         username: username,
         password: password
@@ -25,24 +23,16 @@ export default createStore({
       body: JSON.stringify(userInfos)})
     },
     expChecker: ({commit}, userData) => {
-      console.log("expChecker has been called");
       const todayDate = new Date().getTime();
       if (userData.userData === null) {
-        console.log("userData is null")
         localStorage.setItem("expChecking" , "false");
         return false
       } else {
-        console.log("LOGGED userData" , userData);
-        console.log("LOGGED todayDate -> " , todayDate);
-        console.log("LOGGED Exp       -> " , userData.userData.Exp);
         if ( todayDate > userData.userData.Exp) {
-          console.log("returned false // todayDate > userData.Exp");
           localStorage.setItem("expChecking" , "false");
           localStorage.removeItem("userData");
-          console.log("userData has been removed from localStorage");
           return false;
         } else {
-          console.log("returned true // todayDate < userData.Exp");
           localStorage.setItem("expChecking" , "true");
           return true;
         }

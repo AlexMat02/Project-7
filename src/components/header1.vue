@@ -24,31 +24,24 @@ export default {
     },
     methods: {
     setProfil() {
-        console.log("setProfil has been called");
         const userData = JSON.parse(localStorage.getItem('userData'));
         localStorage.setItem("profilNumber", userData.userData.userId);
     },
     LoggingOut() {
-        console.log("LoggingOut - 1");
         localStorage.removeItem("userData");
-        console.log("LoggingOut - 2");
         this.$router.push({name: 'bufferPage'});
-        console.log("LoggingOut - 3");
     } 
 }, mounted() {
     // check if user is logged in
     const userData = JSON.parse(localStorage.getItem('userData'));
     this.$store.dispatch('expChecker' , {userData});
     const expCheck = localStorage.getItem('expChecking');
-    console.log("expChecking from header -> " , expCheck);
     if (expCheck == "true") {
         // user is logged in
         this.loggedIn = true;
-        console.log("loggedIn has been set to true");
     } else {
         // user is not logged in
         this.loggedIn = false;
-        console.log("loggedIn has been set to false");
     }
 }
 }

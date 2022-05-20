@@ -26,10 +26,6 @@ export default {
   mounted() {
     fetch(API_URL)
     .then(response => response.json())
-    .then(result => {
-      console.log("console logged api/posts -> " , result)
-    }),
-    console.log("LOGGED USERID -> " , JSON.parse(localStorage.getItem('userData')))
   }
 }
 </script>

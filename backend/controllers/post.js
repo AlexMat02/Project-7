@@ -69,7 +69,6 @@ exports.getOnePost = (req, res) => {
 };
 
 exports.deletePost = (req, res) => {
-    console.log("LOGGED req.body -> ", req.body);
     const postID = req.params.id;
     const postData = req.body;
     const filename = postData.img.split("/images/")[1];
@@ -123,13 +122,11 @@ exports.deletePost = (req, res) => {
 };
 
 exports.updatePost = (req, res) => {
-    console.log("LOGGED req.file -> ", req.file);
     postData = req.body;
     const title = postData.title; 
     const type = postData.type; 
     const content = postData.content;   
     const postId = req.params.id
-    console.log("LOGGED postId -> ", postId);
     try {
         connection.query("UPDATE post SET title = ? WHERE id_Post = ?" , [title, postId], (err, results, fields) => {
             if (err) {
@@ -186,7 +183,6 @@ exports.updatePost = (req, res) => {
 exports.likedPost = (req, res) => {
     const userId = req.body.userId;
     const post = req.body.post;
-    console.log("LOGGED post -> ", post);
     let userLikedPosts = "";
     // This is to check if it already exists, then if it does change query
     try {
@@ -195,15 +191,11 @@ exports.likedPost = (req, res) => {
                 console.log("An error has occured during likedPost request -> ", err);
                 return res.status(400).send()
             }
-            console.log("Those are the results of the user's liked post -> ", results);
             userLikedPosts = results;
             // This is to check if the post is inside the liked table or not
-            console.log("seen1");
-            console.log("userLikedPosts -> ", userLikedPosts);
             // Check if userLikedPosts is empty
             if (userLikedPosts.length < 1) {
                 try {
-                    console.log("User liked/disliked the post for the first time");
                     connection.query("INSERT INTO liked (Liked, User_id_User, Post_id_Post) VALUES (?, ?, ?)", [req.body.like, userId, post.id_Post], (err, results, fields) => {
                         if (err) {
                             console.log("An error has occured during the request likedPost -> ", err);
@@ -219,19 +211,13 @@ exports.likedPost = (req, res) => {
                 // find if the post is inside Liked
                 let correctPost;
                 for (let x = 0; x < userLikedPosts.length; x++) { 
-                    console.log("seen2");
-                    console.log("LOGGED userLikedPosts[x].Post_id_Post -> ", userLikedPosts[x].Post_id_Post);
-                    console.log("LOGGED post.id_Post -> ", post.id_Post);
-                    console.log("LOGGED comparaison -> ", userLikedPosts[x].Post_id_Post == post.id_Post);
                     if (userLikedPosts[x].Post_id_Post == post.id_Post) {
                         correctPost = userLikedPosts[x].Post_id_Post;   
                     }
                 }
                 if (correctPost != undefined && correctPost != null && correctPost != "") {
                     // The post was in the liked table so we update it
-                    console.log("seen3");
                     try {
-                        console.log("User liked/disliked the post but it already exists");
                         connection.query("UPDATE liked SET Liked = ? WHERE User_id_User = ? AND Post_id_Post = ?", [req.body.like, userId, post.id_Post], (err, results, fields) => {
                             if (err) {
                                 console.log("An error has occured during the request likedPost -> ", err);
@@ -246,7 +232,6 @@ exports.likedPost = (req, res) => {
                 } else {
                     // The post wasn't in the liked table so we insert it
                     try {
-                        console.log("User liked/disliked the post for the first time");
                         connection.query("INSERT INTO liked (Liked, User_id_User, Post_id_Post) VALUES (?, ?, ?)", [req.body.like, userId, post.id_Post], (err, results, fields) => {
                             if (err) {
                                 console.log("An error has occured during the request likedPost -> ", err);
@@ -269,7 +254,6 @@ exports.likedPost = (req, res) => {
 
 exports.howManyLikes = (req, res) => {
     const postId = req.params.id;
-    console.log("LOGGED postId -> ", postId);
     try {
         connection.query("SELECT * FROM liked WHERE Post_id_Post = ?", [postId], (err, results, fields) => {
             if (err) {

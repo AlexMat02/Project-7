@@ -43,33 +43,20 @@ export default ({
     },
     methods: {
         fileChange(e) {
-            console.log("LOGGED e -> ", e)
             const file = e.target.files[0];
             this.post.image = URL.createObjectURL(file);
             this.post.file = e.target.files[0];
             const imgInput = document.getElementsByClassName("inputBar")[3];
-            console.log("LOGGED imgInput -> ", imgInput);
-            console.log("LOGGED imgInput.value -> ", imgInput.value);
-            console.log("post.image here !");
-            console.log("LOGGED this.image -> ", this.post.image);
-            console.log("LOGGEd imgInput.files[0] -> ", imgInput.files[0]);
-            console.log("IF TRUE IS BLOB " ,this.post.image instanceof Blob);
             let data = new FormData()
             data.append('file', imgInput.files[0])
-            console.log("LOGGED data -> ", data);
         },
         postCreator() {
             const userData = JSON.parse(localStorage.getItem('userData'));
-            console.log("LOGGED USERDATA .USERID -> " , userData.userData.userId)
-            console.log("LOGGED USERDATA .USERID -> " , userData.userData.token)
             this.$store.dispatch('expChecker' , {userData})
             const expCheck = localStorage.getItem('expChecking');
-            console.log("expChecking -> " , expCheck)
             if (expCheck == "true") {
-                console.log("TEST-1 returned true")
                 const titleInput = document.getElementsByClassName("inputBar")[0];
                 const typeInput = document.getElementsByClassName("inputBar")[1].value;
-                console.log("typeINput.value -> " , typeInput);
                 const contentInput = document.getElementsByClassName("inputBar")[2];
                 const imgInput = document.getElementsByClassName("inputBar")[3];
                 if ( titleInput.value != "" && typeInput.value != "" && contentInput.value != "") {
@@ -91,33 +78,21 @@ export default ({
                     fd.append('imgURL', postContent.imgURL); 
                     fd.append('userId', postContent.userId); 
                     fd.append('user', userData.userData.userId);
-                    console.log("LOGGED this.post.file -> ", this.post.file)
-                    for (var pair of fd.entries()) {
-                        console.log("LOGGED fd -> " , pair[0]+ ', ' + pair[1]); 
-                    }
-                    console.log("LOGGED fd 2 -> " , Object.fromEntries(fd))
-                    console.log("LOGGED postContent -> " , postContent);
                     const myHeaders = new Headers();
                     myHeaders.append('Accept', 'multipart/form-data');
                     myHeaders.append('Authorization', userData.userData.token);
                     fetch("http://localhost:4000/api/posting", {method: 'POST', 
                         headers: myHeaders,
                         body: fd}) 
-                    .then(console.log("fetch request send"))
                     this.$router.push({name: 'Home'})
                 } else if (titleInput.value == ""){
                     titleInput.style.borderColor = "red";
-                    console.log("titleInput empty");
                 } else if (contentInput.value == "") {
                     contentInput.style.borderColor = "red";
-                    console.log("typeInput empty");
                 } else {
                     console.log("boucle not found");
-                    console.log("LOGGED titleInput -> " , titleInput.value);
-                    console.log("LOGGED contentInput -> ", contentInput.value)
                 }
             } else {
-                console.log("TEST-1 returned false")
                 return false;
             }
         },
@@ -128,10 +103,8 @@ export default ({
             const userData = JSON.parse(localStorage.getItem('userData'));
             this.$store.dispatch('expChecker' , {userData});
             const expCheck = localStorage.getItem('expChecking');
-            console.log("expChecking from header -> " , expCheck);
             const titleInput = document.getElementsByClassName("inputBar")[0];
             const typeInput = document.getElementsByClassName("inputBar")[1].value;
-            console.log("typeINput.value -> " , typeInput);
             const contentInput = document.getElementsByClassName("inputBar")[2];
             let fd = new FormData();
             if (this.post.file) {
@@ -141,14 +114,9 @@ export default ({
             fd.append('type', typeInput); 
             fd.append('content', contentInput.value); 
             fd.append('userId', userData.userData.userId);  
-            for (var pair of fd.entries()) {
-                console.log("LOGGED fd -> " , pair[0]+ ', ' + pair[1]); 
-            }
-            console.log("LOGGED fd 2 -> " , Object.fromEntries(fd))
             if (expCheck == "true") {
                 // user is logged in
                 this.loggedIn = true;
-                console.log("loggedIn has been set to true");
                 fetch(`http://localhost:4000/api/updatePost/${posts[postNumber].id_Post}`, {method: 'PUT',
                     headers: {
                         'authorization': userData.userData.token
@@ -159,30 +127,22 @@ export default ({
             } else {
                 // user is not logged in
                 this.loggedIn = false;
-                console.log("loggedIn has been set to false");
             }
         }
     },
     mounted() {
         // Checks if it is in use for creating a post or updating one
         const isUpdating = localStorage.getItem("isUpdating");
-        console.log("LOGGED isUpdating -> ", isUpdating);
-        console.log("LOGGED TYPEOF isUpdating -> ", typeof(isUpdating));
-        console.log("LOGGED compar -> ", isUpdating == "true");
         if (isUpdating == "true") {
-            console.log("updating Post");
             this.updating = true;
             const posts = JSON.parse(localStorage.getItem("postArray"));
             const postNumber = JSON.parse(localStorage.getItem("postNumber"));
-            console.log("LOGGED post -> ", posts[postNumber]);
             const titleInput = document.getElementsByClassName("inputBar")[0];
             const typeInput = document.getElementsByClassName("inputBar")[1];
             const contentInput = document.getElementsByClassName("inputBar")[2];
             titleInput.value = posts[postNumber].title;
             typeInput.value = posts[postNumber].type;
             contentInput.innerHTML = posts[postNumber].content;
-        } else {
-            console.log("creating Post");
         }
     }
 })

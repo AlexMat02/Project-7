@@ -4,7 +4,6 @@ var db = require('../dbConnections');
 var connection = db();
 
 exports.signup = (req, res, next) => {
-    console.log("signup has been asked")
     const { email , username } = req.body;
     bcrypt.hash(req.body.password, 10).then(
         (hash) => {
@@ -33,7 +32,6 @@ exports.login = (req, res, next) => {
                 console.log("An error has occured during login request -> ", err);
                 return res.status(400).send()
             }
-            console.log("LOGGED results -> ", results);
             if (results.length < 1) {
                 return res.status(500).json({
                     message: "No user found with those logs"
@@ -169,8 +167,7 @@ exports.whichPostsSighted = (req, res) => {
             if (err) {
                 console.log("An error has occured during whichPostsSighted request -> ", err);
                 return res.status(400).send()
-            }
-            console.log("those are the results -> ", results); 
+            } 
             res.status(200).json(results);
         })
     } catch {
@@ -181,8 +178,6 @@ exports.whichPostsSighted = (req, res) => {
 
 exports.whichPostsLiked = (req, res) => {
     const userId = req.params.id;
-    console.log("LOGGED userId -> ", userId);
-    console.log("LOGGED req.params.id -> ", userId);
     try {
         connection.query("SELECT * FROM liked WHERE User_id_User = ?", [userId], (err, results, fields) => {
             if (err) {

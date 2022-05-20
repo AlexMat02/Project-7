@@ -12,7 +12,6 @@ export default {
     },
     mounted() {
         const logs = JSON.parse(localStorage.getItem("signupLogs"));
-        console.log("Logged logs -> ", logs)
         const userInfos = {
             username: logs.username,
             password: logs.password
@@ -28,20 +27,13 @@ export default {
         .then(response => response.json())
         .then(res => dataHandler.userData = res)
         .then( () => {
-            console.log("LOGGEd data -> ", dataHandler.userData);
             if (dataHandler.userData.message) {
-                console.log("wrong logs")
                 throw 'cancel'
-                }
+            }
         })
         .then(res => localStorage.setItem("userData" , JSON.stringify(dataHandler))) // not returning anything
-        .then(console.log( "logged localstorage -> " , JSON.parse(localStorage.getItem('userData'))))
         .then ( () => {
             this.$router.push({name: 'Home'})
-        })
-        .catch( () => {
-            console.log("error")
-            console.log("YEET");
         })
     }
 }

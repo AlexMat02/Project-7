@@ -27,7 +27,6 @@ export default {
     },
     methods: {
         deleteRequest() {
-            console.log("delete Account has been requested");
             const userData = JSON.parse(localStorage.getItem('userData'));
             fetch(`http://localhost:4000/auth/deleteOneUser/${userData.userData.userId}`, {method: 'DELETE',
             headers: {
@@ -55,7 +54,6 @@ export default {
             'Content-Type': 'application/json'}})
             .then(response => response.json())
             .then(res => localStorage.setItem("userArray", JSON.stringify(res)))
-            .then(console.log("LOGGED array of all users -> " , JSON.parse(localStorage.getItem("userArray"))));
             const userArray = JSON.parse(localStorage.getItem("userArray"));
             const correctProfil = localStorage.getItem("profilNumber");
             const userData = JSON.parse(localStorage.getItem('userData'));
@@ -63,19 +61,13 @@ export default {
             for (let n = 0; n < userArray.length; n++) {
                 if (userArray[n].id_User == correctProfil) {
                     profilIndex = n;
-                    console.log("LOGGED profilIndex -> " , profilIndex);
-                } else {
-                    console.log("not this one")
-                    console.log("LOGGED WHILE profilIndex -> " , profilIndex);
                 }
             }
-            console.log("LOGGED userArray[profilIndex] -> " , userArray[profilIndex])
             this.$store.dispatch('expChecker' , {userData})
             const expCheck = localStorage.getItem('expChecking');
             if (expCheck == "true") {
                 // user is logged in
                 this.loggedIn = true;
-                console.log("loggedIn set to true");
                 // This is the request to update it to the database
                 fetch(`http://localhost:4000/auth/userDescription/${userArray[profilIndex].id_User}`, {method: 'POST',
                     headers: {
@@ -88,7 +80,6 @@ export default {
             } else {
                 // user is not logged in
                 this.loggedIn = false;
-                console.log("loggedIn set to false");
             }
         },
         editing(){
@@ -107,12 +98,10 @@ export default {
         },
     },
     mounted(){
-        console.log("logged this.loggedIN -> ", this.loggedIn);
         // this is for updatingPost
         localStorage.removeItem("isUpdating");
         // When the user clicks on his profil this is used 
         const profilId = localStorage.getItem("profilId");
-        console.log("LOGGED profilId -> " , profilId);
         // fetch allUser Array
         fetch("http://localhost:4000/auth/users", {method: 'GET', 
             headers: {
@@ -120,25 +109,17 @@ export default {
             'Content-Type': 'application/json'}})
         .then(response => response.json())
         .then( (res) => {
-            console.log("seen");
-            localStorage.setItem("userArray", JSON.stringify(res)) // #WORK could be stringify ?
-            console.log("LOGGEd array of all users -> ", JSON.parse(localStorage.getItem("userArray")))
+            localStorage.setItem("userArray", JSON.stringify(res))
             // Get correct Data for later use
             const userArray = JSON.parse(localStorage.getItem("userArray"));
             const correctProfil = localStorage.getItem("profilNumber");
-            console.log("LOGGED correctProfil -> ", correctProfil);
             // Find the correct index of the user inside userArray
             let profilIndex;
             for (let n = 0; n < userArray.length; n++) {
                 if (userArray[n].id_User == correctProfil) {
                     profilIndex = n;
-                    console.log("LOGGED profilIndex -> " , profilIndex);
-                } else {
-                    console.log("not this one")
-                    console.log("LOGGED WHILE profilIndex -> " , profilIndex);
-                }
+                } 
             }
-            console.log("LOGGED userArray[profilIndex] -> " , userArray[profilIndex])
             // display the correct profil name
             const profilName = document.getElementById("profilUsername");
             profilName.innerHTML = userArray[profilIndex].username;
@@ -152,21 +133,14 @@ export default {
             const userData = JSON.parse(localStorage.getItem('userData'));
             this.$store.dispatch('expChecker' , {userData})
             const expCheck = localStorage.getItem('expChecking');
-            console.log("expChecking -> " , expCheck)
-            console.log("LOGGED userData -> " , userData);
             if (userData != null) {
-                console.log("user has created this")
                 if (expCheck == "true") {
                     // user is logged in
                     this.loggedIn = true;
-                    console.log("loggedIn set to true");
                 } else {
                     // user is not logged in
                     this.loggedIn = false;
-                    console.log("loggedIn set to false");
                 }
-            } else {
-                console.log("not the right user or not connected")
             }
         });
         
