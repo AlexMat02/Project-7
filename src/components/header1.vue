@@ -64,11 +64,11 @@ header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background-color: aliceblue;
+    background-color: #091f43;
 }
 .header__button {
     background-color: white;
-    border: 2px solid rgb(155, 190, 255);
+    border: 2px solid #D1515A;
     border-radius: 15px;
     font-size: large;
     padding: 10px;
@@ -83,7 +83,7 @@ header {
 }
 @keyframes buttonHover {
     0% {background-color: white;}
-    100% {background-color: rgb(155, 190, 255);}
+    100% {background-color: #D1515A;}
 }
 .header__container{
     display: flex;
@@ -105,7 +105,7 @@ header {
     margin-left: 15px;
     margin-bottom: 5px;
     appearance: none;
-    border: 2px solid rgb(155, 190, 255);
+    border: 2px solid #D1515A;
     border-radius: 20px;
 }
 #searchBar:hover {
@@ -116,6 +116,6 @@ header {
 }
 @keyframes searchBarHover {
     0% {background-color: white;}
-    100% {background-color: rgb(155, 190, 255);}
+    100% {background-color: #D1515A;}
 }
 </style>

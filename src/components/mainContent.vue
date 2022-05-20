@@ -133,7 +133,7 @@ export default {
                                 for (let w = 0; w < posts.length; w++) {
                                     if (whichPostsSighted[x].Post_id_Post == posts[w].id_Post) {
                                         let card = document.getElementById("mD" + posts[w].id_Post)
-                                        card.style.backgroundColor = "#E2B6C7";
+                                        card.style.backgroundColor = "#AFAFAF";
                                     }
                                 }
                             }
@@ -166,7 +166,7 @@ a, a:hover, a:visited, a:active{
     width: 80vw;
     min-width: 300px;
     padding: 20px;
-    background-color: rgb(155, 190, 255);
+    background-color: #091f43;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -193,10 +193,10 @@ a, a:hover, a:visited, a:active{
     text-decoration: none;
 }
 .divContent__filter{
-    color: blueviolet !important;
+    color: #D1515A !important;
 }
 .divContent__author{
-    color: blueviolet;
+    color: #D1515A;
     margin: 5px;
 }
 .divContent__content{

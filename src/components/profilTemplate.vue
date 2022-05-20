@@ -194,7 +194,7 @@ export default {
     cursor: pointer;
 }
 .profil{
-    background-color: rgb(155, 190, 255);
+    background-color: #091F43;
     margin-left: auto;
     margin-right: auto;
     width: 80vw;

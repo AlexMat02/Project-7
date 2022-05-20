@@ -34,7 +34,7 @@ export default {
 <style>
 .btn__postCreate{
     appearance: none;
-    border: 2px rgb(155, 190, 255) solid;
+    border: 2px #D1515A solid;
     border-radius: 30%;
     background-color: white;
     position: fixed;
@@ -53,6 +53,6 @@ export default {
 }
 @keyframes buttonHover {
     0% {background-color: white;}
-    100% {background-color: rgb(155, 190, 255);}
+    100% {background-color: #D1515A;}
 }
 </style>
