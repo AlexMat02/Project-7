@@ -17,11 +17,6 @@ router.use((req, res, next) => {
     next();
 });
 
-router.use((req, res, next) => {
-    console.log("A request has been asked");
-    next();
-})
-
 router.post('/api/posting', auth, jsonParser, multer, postCtrl.createPost);
 
 router.post('/api/likedPost/:id', auth, postCtrl.likedPost);
