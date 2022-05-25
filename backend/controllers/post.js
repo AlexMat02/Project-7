@@ -4,25 +4,13 @@ const multer = require('multer');
 const fs = require("fs");
 
 exports.createPost = (req, res) => {
-    console.log("createPost seen")
-    console.log("LOGGED req.file -> ", req.file);
-    console.log("LOGGED req.body.file -> ", req.body.file);
-    console.log("LOGGED req.body -> ", req.body);
-    console.log("LOGGED req.protocol -> ", req.protocol);
     const postData = req.body;
     const url = req.protocol + '://' + req.get('host');
-    console.log("LOGGED url -> ", url);
     const v = url + '/images/' + req.file.filename;
-    console.log("v -> ", v);
-    console.log("req.file -> ", req.file);
-    console.log("Logged postData in the correct way -> " , postData.post);
-    console.log("Logged postData in the correct way -> " , postData);
     const title = postData.title; 
     const type = postData.type; 
     const content = postData.content; 
-    const img = postData.img;  
     const userId = postData.userId; 
-    console.log("LOGGED title " , title , "LOGGED type " , type , "LOGGED userId " , userId, "LOGGED img ", img);
     try {
         connection.query("INSERT INTO post (title, type, img, content,User_id_User) VALUES (?, ?, ?, ?, ?)", [title, type, v, content, userId], (err, results, fields) => {
             if (err) {
@@ -75,8 +63,6 @@ exports.deletePost = (req, res) => {
     fs.unlink("images/" + filename ,(err) => {
         if (err) {
             console.log("err -> ", err)
-        } else {
-            console.log("img deleted")
         }
     })
     // this is to delete the Foreign Key inside Liked
