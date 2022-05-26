@@ -39,7 +39,7 @@ export default({
                 password: passwordInput.value,
             }
             const currentDate = new Date();
-            const expDate = currentDate.getTime() + 60000;
+            const expDate = currentDate.getTime() + 900000;
             const dataHandler = {'Exp' : expDate}
             fetch("http://localhost:4000/auth/login", {method: 'POST', 
             headers: {
