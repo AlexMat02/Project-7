@@ -4,10 +4,10 @@ var db = null;
 module.exports = function() {
     if(!db) {
         db = mysql.createConnection({
-            host : 'localhost',
-            user : 'root',
-            password: 'password',
-            database: 'mydb'
+            host : process.env.mysqlHost,
+            user : process.env.mysqlUser,
+            password: process.env.mysqlPassword,
+            database: process.env.mysqlDatabase
         });
     }
     return db

@@ -1,9 +1,11 @@
 const mysql = require("mysql");
+const dotenv = require("dotenv")
+dotenv.config()
 const connection = mysql.createConnection({
-    host : 'localhost',
-    user : 'root',
-    password: 'password',
-    database: 'mydb'
+    host : process.env.mysqlHost,
+    user : process.env.mysqlUser,
+    password: process.env.mysqlPassword,
+    database: process.env.mysqlDatabase
 });
 
 connection.connect((err) => {
@@ -25,7 +27,8 @@ app.listen(port, () => {
 Jean
 a11
 
+Azer@gmail.com
+Azer123T!!
 Didier
-123
 
 */
