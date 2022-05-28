@@ -200,6 +200,7 @@ export default {
         const text = document.getElementById("postText");
         const author = document.getElementById("postAuthor");
         const imgHTML = document.getElementById("imgHTML");
+        imgHTML.alt = "The picture of the post"
         // This part is here to display how many likes/dislikes a post has
         fetch(`http://localhost:4000/api/howManyLikes/${posts[postNumber].id_Post}`, {method: 'GET', 
             headers: {

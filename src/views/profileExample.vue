@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div lang="en">
         <header-1/>
         <profil-template/>
     </div>

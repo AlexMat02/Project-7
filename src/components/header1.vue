@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div lang="en">
         <header>
             <div class="header__container">
-                <router-link to="/"><img src="../assets/icon-left-font-monochrome-black.png" id="header1__header"></router-link>
+                <router-link to="/"><img src="../assets/icon-left-font-monochrome-black.png" id="header1__header" alt="The website's Logo"></router-link>
             </div>
             <div>
                 <router-link to="/login"><button class="header__button" id="login" v-if="loggedIn == false"> Login </button></router-link>

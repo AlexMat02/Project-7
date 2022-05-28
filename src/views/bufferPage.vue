@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div lang="en">
         <h1>Please wait</h1>
     </div>
 </template>

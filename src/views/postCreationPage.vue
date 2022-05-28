@@ -1,20 +1,20 @@
 <template>
-    <div>
+    <div lang="en">
         <header-1/>
         <div>
             <div>
-                <h2> Title </h2>
-                <input class="inputBar">
+                <label for="title"> Title </label>
+                <input id="title" class="inputBar">
                 <h2> Type </h2>
                 <select class="inputBar dropDownMenu">
                     <option> Work </option>
                     <option> Fun </option>
                 </select>
-                <h2> Content </h2>
+                <label for="textarea"> Content </label>
                 <textarea class="inputBar" id="textarea"></textarea>
-                <h2> Image URL </h2>
+                <label for="imggg"> Image URL </label>
                 <form enctype="multipart/form-data" method="post">
-                    <input type="file" class="inputBar" @change="fileChange($event)">
+                    <input id="imggg" type="file" class="inputBar" @change="fileChange($event)">
                     <img v-if="post.image" :src="post.image">
                 </form>
             </div>
@@ -164,7 +164,7 @@ export default ({
     border: solid 2px white;
     appearance: none;
     border-radius: 15%;
-    color: #D1515A;
+    color: black;
     font-size: large;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 800;

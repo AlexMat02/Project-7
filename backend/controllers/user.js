@@ -34,7 +34,7 @@ exports.login = (req, res, next) => {
             }
             if (results.length < 1) {
                 return res.status(500).json({
-                    message: "No user found with those logs"
+                    message: "No user found with those logs" , results
                 })
             }
             bcrypt.compare(pw, results[0].password).then(

@@ -1,5 +1,5 @@
 <template>
-    <div class="mainContent__container">
+    <div class="mainContent__container" lang="en">
     </div>
 </template>
 
@@ -124,7 +124,7 @@ export default {
                                 for (let w = 0; w < posts.length; w++) {
                                     if (whichPostsSighted[x].Post_id_Post == posts[w].id_Post) {
                                         let card = document.getElementById("mD" + posts[w].id_Post)
-                                        card.style.backgroundColor = "#AFAFAF";
+                                        card.style.backgroundColor = "yellow";
                                     }
                                 }
                             }

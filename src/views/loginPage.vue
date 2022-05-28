@@ -1,16 +1,16 @@
 <template>
-    <div>
+    <div lang="en">
         <header-1/>
         <div class="mainContent__container">
             <div class="divContent">
                 <h1 class="linkFIX"> Login </h1>
                 <div>
                     <div>
-                        <h2> Username </h2>
+                        <label for="username"> Username </label>
                         <input id="username" class="inputBar">
                     </div>
                     <div>
-                        <h2> Password </h2>
+                        <label for="password"> Password </label>
                         <input id="password" type="password" class="inputBar">
                     </div>
                 </div>

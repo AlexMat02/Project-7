@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" lang="en">
     <header1/>
     <filterBar/>
     <create-post-button/>
