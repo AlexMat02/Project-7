@@ -44,7 +44,7 @@ exports.login = (req, res, next) => {
                             message: "Incorrect Password"
                         })
                     }
-                    const token = jwt.sign({userId: results[0].id_User}, 'SUPER_SECRET_TOKEN', {expiresIn: '24h'});
+                    const token = jwt.sign({userId: results[0].id_User}, process.env.secretToken, {expiresIn: '24h'});
                     return res.status(200).json({
                         userId: results[0].id_User,
                         token: token,
