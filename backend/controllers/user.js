@@ -2,25 +2,43 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 var db = require('../dbConnections');
 var connection = db();
+var validator = require("email-validator");
+var passwordValidator = require("password-validator");
+
+let schema = new passwordValidator();
+
+schema
+.is().min(8)                                    // Minimum length 8
+.is().max(30)                                  // Maximum length 100
+.has().uppercase()                              // Must have uppercase letters
+.has().lowercase()                              // Must have lowercase letters
+.has().digits(1)                                // Must have at least 1 digits
+.has().not().spaces()                           // Should not have spaces
 
 exports.signup = (req, res, next) => {
     const { email , username } = req.body;
-    bcrypt.hash(req.body.password, 10).then(
-        (hash) => {
-            try {
-                connection.query("INSERT INTO user (email, password, username) VALUES (?, ?, ?)", [email, hash, username], (err, results, fields) => {
-                    if (err) {
-                        console.log("An error has occured during signup request -> " , err);
-                        return res.status(400).send()
-                    }
-                    return res.status(201)
-                })
-            } catch {
-                console.log("An error has occured for signup request -> " , err);
-                return res.status(500).send();
+    if (validator.validate(email) == true && schema.validate(req.body.password) == true) {
+        bcrypt.hash(req.body.password, 10).then(
+            (hash) => {
+                try {
+                    connection.query("INSERT INTO user (email, password, username) VALUES (?, ?, ?)", [email, hash, username], (err, results, fields) => {
+                        if (err) {
+                            console.log("An error has occured during signup request -> " , err);
+                            return res.status(400).send()
+                        }
+                        return res.status(201)
+                    })
+                } catch {
+                    console.log("An error has occured for signup request -> " , err);
+                    return res.status(500).send();
+                }
             }
-        }
-    )
+        )
+    } else {
+        return res.status(500).json({
+            message: 'Email or Password not validated'
+        })
+    }
 };
 
 exports.login = (req, res, next) => {
