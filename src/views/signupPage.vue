@@ -75,7 +75,6 @@ export default({
                     }
                     // Check if one character of the password is in Uppercase
                     if (pwArray[y].toUpperCase() == pwArray[y] && /^[0-9]*$/.test(pwArray[y]) == false && /^[a-zA-Z0-9]*$/.test(pwArray[y]) == true) {
-                        console.log("Upperletter spotted ", y, " character -> ", pwArray[y])
                         verify.upper = true;
                     }
                 }
@@ -112,7 +111,6 @@ export default({
             // Checks if the email given by the user is built like a real email
             const emailToValidate = this.email;
             const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-            console.log(emailRegexp.test(emailToValidate));
             if (emailRegexp.test(emailToValidate) == false ) {
                 return
             } else {

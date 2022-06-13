@@ -17,7 +17,6 @@ export default {
             username: logs.username,
             password: logs.password
         }
-        console.log(userInfos)
         const currentDate = new Date();
         const expDate = currentDate.getTime() + 60000;
         const dataHandler = {'Exp' : expDate}
