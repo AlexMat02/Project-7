@@ -50,7 +50,7 @@ exports.login = (req, res, next) => {
                 console.log("An error has occured during login request -> ", err);
                 return res.status(400).send()
             }
-            if (results.length < 1) {
+            if (results.length === 0) {
                 return res.status(500).json({
                     message: "No user found with those logs" , results
                 })

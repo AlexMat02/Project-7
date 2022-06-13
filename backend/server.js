@@ -31,4 +31,12 @@ Azer@gmail.com
 Azer123T!!
 Didier
 
+Verdicas@gmail.com
+123AZER!a
+Ver
+
+-Test-
+Vert@gmail.com
+123AZER!a
+Vert
 */
