@@ -21,13 +21,13 @@ router.post('/api/posting', auth, jsonParser, multer, postCtrl.createPost);
 
 router.post('/api/likedPost/:id', auth, postCtrl.likedPost);
  
-router.get('/api/posts', postCtrl.getAllPost);
+router.get('/api/posts', auth, postCtrl.getAllPost);
 
 router.put('/api/updatePost/:id', auth, jsonParser, multer, postCtrl.updatePost);
 
 router.delete('/api/posts/:id', auth, jsonParser, postCtrl.deletePost);
 
-router.get('/api/posts/:id', postCtrl.getOnePost);
+router.get('/api/posts/:id', auth, postCtrl.getOnePost);
 
 router.get('/api/howManyLikes/:id', postCtrl.howManyLikes);
 

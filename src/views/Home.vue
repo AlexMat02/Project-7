@@ -24,8 +24,22 @@ export default {
   methods: {
   },
   mounted() {
-    fetch(API_URL)
-    .then(response => response.json())
+    // Check if the user is logged in (useful for other)
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    this.$store.dispatch('expChecker' , {userData});
+    // check if user is logged in
+    const expCheck = localStorage.getItem('expChecking');
+    if (userData === null) {
+      this.$router.push({name: 'loginPage'});
+      return
+    } else {
+      fetch(API_URL, {method: 'GET', 
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'authorization': userData.userData.token}})
+      .then(response => response.json())
+    }
   }
 }
 </script>

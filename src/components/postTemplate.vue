@@ -184,12 +184,21 @@ export default {
         }
     },
     mounted() {
-        // getting post data from backend
-        fetch("http://localhost:4000/api/posts", {method: 'GET', 
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'}})
-        .then(response => response.json())
+        // Check if the user is logged in (useful for other)
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        this.$store.dispatch('expChecker' , {userData});
+        // check if user is logged in
+        const expCheck = localStorage.getItem('expChecking');
+        if (userData === null) {
+            this.$router.push({name: 'loginPage'});
+            return
+        }
+      fetch("http://localhost:4000/api/posts", {method: 'GET', 
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'authorization': userData.userData.token}})
+      .then(response => response.json())
         .then(res => localStorage.setItem("postArray", JSON.stringify(res)))
         let posts = JSON.parse(localStorage.getItem('postArray'));
         // getting the index of the post that the user chose
@@ -238,10 +247,6 @@ export default {
         currentProfil.addEventListener("click", () => {
             localStorage.setItem("profilNumber", posts[postNumber].User_id_User);
         })
-        // getting userData and checking if user's logged in
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        this.$store.dispatch('expChecker' , {userData})
-        const expCheck = localStorage.getItem('expChecking');
         if (expCheck == "true") {
             this.loggedIn = true
             // This part is for unread posts

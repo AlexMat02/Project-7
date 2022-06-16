@@ -131,6 +131,15 @@ export default ({
         }
     },
     mounted() {
+        // Check if the user is logged in (useful for other)
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        this.$store.dispatch('expChecker' , {userData});
+        // check if user is logged in
+        const expCheck = localStorage.getItem('expChecking');
+        if (userData === null) {
+            this.$router.push({name: 'loginPage'});
+            return
+        }
         // Checks if it is in use for creating a post or updating one
         const isUpdating = localStorage.getItem("isUpdating");
         if (isUpdating == "true") {

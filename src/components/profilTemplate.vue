@@ -98,6 +98,15 @@ export default {
         },
     },
     mounted(){
+        // Check if the user is logged in (useful for other)
+        let userData = JSON.parse(localStorage.getItem("userData"));
+        this.$store.dispatch('expChecker' , {userData});
+        // check if user is logged in
+        let expCheck = localStorage.getItem('expChecking');
+        if (userData === null) {
+            this.$router.push({name: 'loginPage'});
+            return
+        }
         // this is for updatingPost
         localStorage.removeItem("isUpdating");
         // When the user clicks on his profil this is used 
@@ -130,9 +139,9 @@ export default {
                 this.editingText = userArray[profilIndex].description;
             }
             // Check if the user is loggedIn
-            const userData = JSON.parse(localStorage.getItem('userData'));
+            let userData = JSON.parse(localStorage.getItem('userData'));
             this.$store.dispatch('expChecker' , {userData})
-            const expCheck = localStorage.getItem('expChecking');
+            let expCheck = localStorage.getItem('expChecking');
             if (userData != null) {
                 if (expCheck == "true") {
                     // user is logged in
